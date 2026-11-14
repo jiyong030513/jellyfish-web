@@ -40,6 +40,10 @@ def 끄기(p):
 
 
 def main():
+    if WIN:
+        # 실행한 프로그램에서 "Ctrl+C 무시" 설정을 물려받은 경우에도 Ctrl+C 한 번으로 끌 수 있게 다시 켬
+        import ctypes
+        ctypes.windll.kernel32.SetConsoleCtrlHandler(None, False)
     if not shutil.which("node"):
         print("Node.js가 없어요. https://nodejs.org 에서 LTS를 설치하고 VS Code를 다시 켜 주세요.")
         return 1
