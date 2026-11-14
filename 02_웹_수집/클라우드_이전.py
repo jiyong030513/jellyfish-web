@@ -1,11 +1,11 @@
-"""내 PC의 jellyfish DB를 클라우드 MySQL(Aiven)로 그대로 옮긴다 (처음 배포할 때 한 번).
+"""내 PC의 jellyfish DB를 클라우드 DB(TiDB Cloud, MySQL 호환)로 그대로 옮긴다 (처음 배포할 때 한 번).
 
-준비: .env에 아래 값을 채움 (Aiven 화면의 Connection information)
-    CLOUD_MYSQL_HOST=xxxx.aivencloud.com
-    CLOUD_MYSQL_PORT=12345
-    CLOUD_MYSQL_USER=avnadmin
+준비: .env에 아래 값을 채움 (TiDB Cloud 클러스터 화면의 Connect)
+    CLOUD_MYSQL_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+    CLOUD_MYSQL_PORT=4000
+    CLOUD_MYSQL_USER=xxxxxxxx.root
     CLOUD_MYSQL_PWD=...
-    CLOUD_MYSQL_SSL_CA=ca.pem        (Aiven에서 받은 CA 인증서, 02_웹_수집 폴더에 저장)
+    CLOUD_MYSQL_SSL_CA=system        (공인 인증서 사용. 인증서 파일이면 경로)
 실행:  python 클라우드_이전.py
   1) 내 PC DB를 mysqldump (백업 폴더에 저장)
   2) 뷰의 DEFINER(root@localhost) 제거 → 클라우드 계정으로 만들 수 있게
@@ -21,7 +21,7 @@ import sys
 
 import pymysql
 
-from db import BACKUP_DIR, DB, mysql_도구, 접속_옵션
+from db import BACKUP_DIR, DB, _ca_경로, mysql_도구, 접속_옵션
 
 LOCAL = dict(DB, host="localhost", port=int(os.environ.get("LOCAL_MYSQL_PORT", "3306")),
              user=os.environ.get("LOCAL_MYSQL_USER", "root"),
@@ -34,8 +34,7 @@ def 클라우드_정보():
     miss = [k for k in need if not os.environ.get(k)]
     if miss:
         sys.exit(f"[멈춤] .env에 {', '.join(miss)} 값을 채워 주세요.")
-    ca = os.environ["CLOUD_MYSQL_SSL_CA"]
-    ca = ca if os.path.isabs(ca) else os.path.join(os.path.dirname(os.path.abspath(__file__)), ca)
+    ca = _ca_경로(os.environ["CLOUD_MYSQL_SSL_CA"])
     if not os.path.exists(ca):
         sys.exit(f"[멈춤] CA 인증서 파일이 없어요: {ca}")
     return dict(host=os.environ["CLOUD_MYSQL_HOST"], port=int(os.environ["CLOUD_MYSQL_PORT"]),
@@ -61,30 +60,49 @@ def 행수(info, db_exists=True):
 def main():
     cloud = 클라우드_정보()
 
-    print("1) 내 PC DB 내보내기 (mysqldump)")
+    print("1) 내 PC DB 내보내기 (mysqldump, 테이블과 데이터만)")
     os.makedirs(BACKUP_DIR, exist_ok=True)
     dump = os.path.join(BACKUP_DIR, f"jellyfish_클라우드이전_{dt.datetime.now():%Y%m%d_%H%M}.sql")
+    conn = pymysql.connect(**LOCAL)
+    with conn.cursor() as c:
+        c.execute("SELECT TABLE_NAME FROM information_schema.VIEWS WHERE TABLE_SCHEMA = 'jellyfish'")
+        views = [r[0] for r in c.fetchall()]
+    conn.close()
     subprocess.run([mysql_도구("mysqldump")] + 접속_옵션(LOCAL) +
-                   ["--single-transaction", "--triggers", "--set-gtid-purged=OFF", "--no-tablespaces",
-                    f"--result-file={dump}", "jellyfish"],
+                   ["--single-transaction", "--skip-triggers", "--set-gtid-purged=OFF", "--no-tablespaces",
+                    "--skip-add-locks", f"--result-file={dump}", "jellyfish"],
                    env=dict(os.environ, MYSQL_PWD=LOCAL["password"]), check=True)
-
-    print("2) 뷰의 DEFINER 제거")
+    # 뷰 부분은 덤프에서 뺌 (MySQL이 다시 적은 뷰 SQL을 TiDB가 못 읽음 → 원본 SQL2로 다시 만듦)
+    # (윈도우에서는 한글 뷰 이름이 --ignore-table로 전달되지 않아 파일에서 직접 지움)
     sql = open(dump, encoding="utf-8").read()
-    sql = re.sub(r"/\*!50013 DEFINER=`[^`]*`@`[^`]*` SQL SECURITY DEFINER \*/", "", sql)
-    sql = re.sub(r"DEFINER=`[^`]*`@`[^`]*`\s*", "", sql)
-    fixed = dump.replace(".sql", "_definer제거.sql")
-    open(fixed, "w", encoding="utf-8").write(sql)
+    parts = re.split(r"(?=\n--\n-- )", sql)
+    sql = "".join(p for p in parts if not re.match(r"\n--\n-- (Temporary view structure|Final view structure)", p))
+    open(dump, "w", encoding="utf-8").write(sql)
 
-    print(f"3) 클라우드에 적재: {cloud['host']}")
+    print(f"2) 클라우드에 테이블·데이터 적재: {cloud['host']}")
     boot = dict(cloud, database=None)
     conn = pymysql.connect(**{k: v for k, v in boot.items() if v is not None})
     with conn.cursor() as c:
         c.execute("CREATE DATABASE IF NOT EXISTS jellyfish DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+        for v in views:                                   # 이전 시도에서 남은 뷰 정리
+            c.execute(f"DROP VIEW IF EXISTS jellyfish.`{v}`")
     conn.close()
-    with open(fixed, "rb") as f:
-        subprocess.run([mysql_도구("mysql")] + 접속_옵션(cloud) + ["jellyfish"], stdin=f,
-                       env=dict(os.environ, MYSQL_PWD=cloud["password"]), check=True)
+    env = dict(os.environ, MYSQL_PWD=cloud["password"])
+    with open(dump, "rb") as f:
+        subprocess.run([mysql_도구("mysql")] + 접속_옵션(cloud) + ["jellyfish"], stdin=f, env=env, check=True)
+
+    print("3) 뷰 7개는 원본 SQL2_views.sql을 그대로 실행해 만듦")
+    sql2 = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "엔디비_최종테이블_10", "SQL2_views.sql")
+    # TiDB에는 공간 함수(ST_Distance_Sphere, POINT)가 없음 → MySQL과 같은 하버사인 공식(지구 반지름 6,370,986m)으로 바꿔 실행
+    #  (원본 SQL2 파일은 그대로 두고 클라우드에 보낼 때만 바꿈)
+    거리식 = ("(2 * 6370986 * ASIN(SQRT(POW(SIN(RADIANS(a.위도 - h.위도) / 2), 2) + "
+             "COS(RADIANS(h.위도)) * COS(RADIANS(a.위도)) * POW(SIN(RADIANS(a.경도 - h.경도) / 2), 2))))")
+    원본 = "ST_Distance_Sphere(POINT(h.경도, h.위도), POINT(a.경도, a.위도))"
+    s2 = open(sql2, encoding="utf-8").read()
+    if 원본 not in s2:
+        sys.exit("[멈춤] SQL2의 거리 계산식이 예상과 달라요")
+    s2 = s2.replace(원본, 거리식)
+    subprocess.run([mysql_도구("mysql")] + 접속_옵션(cloud) + ["jellyfish"], input=s2.encode("utf-8"), env=env, check=True)
 
     print("4) 행 수 비교 (내 PC / 클라우드)")
     a, b = 행수(LOCAL), 행수(cloud)

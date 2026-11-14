@@ -1,5 +1,5 @@
 # Render 배포 설정: 백엔드(FastAPI)만 Render에 올림. 화면(React)은 Vercel.
-# 비밀값(sync: false)은 Render 화면에서 직접 입력. CA 인증서는 Secret File(ca.pem)로 등록 → /etc/secrets/ca.pem
+# 비밀값(sync: false)은 Render 화면에서 직접 입력. DB는 TiDB Cloud (공인 인증서 → MYSQL_SSL_CA=system)
 services:
   - type: web
     name: jellyfish-api
@@ -23,6 +23,6 @@ services:
       - key: MYSQL_DB
         value: jellyfish
       - key: MYSQL_SSL_CA
-        value: /etc/secrets/ca.pem
+        value: system
       - key: ALLOWED_ORIGINS
         sync: false

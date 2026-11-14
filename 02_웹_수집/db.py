@@ -42,9 +42,18 @@ DB = dict(host=os.environ.get("MYSQL_HOST", "localhost"),
           database=os.environ.get("MYSQL_DB", "jellyfish"), charset="utf8mb4")
 
 # 클라우드 DB는 암호화(SSL) 연결 필수 → CA 인증서 경로 (02_웹_수집 기준 상대경로 가능)
-SSL_CA = os.environ.get("MYSQL_SSL_CA", "")
+#   "system" = 공인 인증서 묶음 사용 (TiDB Cloud처럼 공인 인증서를 쓰는 DB)
+def _ca_경로(v):
+    if not v:
+        return ""
+    if v.lower() == "system":
+        import certifi
+        return certifi.where()
+    return v if os.path.isabs(v) else os.path.join(HERE, v)
+
+
+SSL_CA = _ca_경로(os.environ.get("MYSQL_SSL_CA", ""))
 if SSL_CA:
-    SSL_CA = SSL_CA if os.path.isabs(SSL_CA) else os.path.join(HERE, SSL_CA)
     DB["ssl"] = {"ca": SSL_CA}
 
 NIFS_KEY = os.environ.get("NIFS_KEY", "")   # 국립수산과학원 OpenAPI 인증키
@@ -94,8 +103,11 @@ def 백업():
     os.makedirs(BACKUP_DIR, exist_ok=True)
     out = os.path.join(BACKUP_DIR, f"jellyfish_{dt.datetime.now():%Y%m%d_%H%M}.sql")
     env = dict(os.environ, MYSQL_PWD=DB["password"])   # 비밀번호를 명령줄에 쓰지 않음
-    extra = [] if DB["host"] in ("localhost", "127.0.0.1") else ["--set-gtid-purged=OFF", "--no-tablespaces"]
+    if DB["host"] in ("localhost", "127.0.0.1"):
+        extra = ["--routines", "--triggers"]
+    else:   # 클라우드 DB(TiDB 등): 지원하지 않는 옵션은 끔 (이 DB에는 프로시저·트리거가 없음)
+        extra = ["--set-gtid-purged=OFF", "--no-tablespaces", "--column-statistics=0", "--skip-add-locks",
+                 "--skip-routines", "--skip-triggers"]
     subprocess.run([mysql_도구("mysqldump")] + 접속_옵션() + extra +
-                   ["--single-transaction", "--routines", "--triggers",
-                    f"--result-file={out}", DB["database"]], env=env, check=True)
+                   ["--single-transaction", f"--result-file={out}", DB["database"]], env=env, check=True)
     return out
