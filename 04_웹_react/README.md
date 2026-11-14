@@ -35,7 +35,7 @@ python run.py
 - 매주 갱신: `update_all.py`가 클라우드 DB에 직접 쓰고, 마지막에 Render의 `/api/reload`를 호출해 웹이 새 자료를 읽음.
 - Render 무료 서버는 15분간 접속이 없으면 잠든다. 그 뒤 첫 접속은 서버 깨우기 + DB 읽기로 1분 정도 걸림 (발표 전에 한 번 열어 두기).
 - 코드 수정 반영
-  - 백엔드: GitHub `main`에 push하면 Render가 자동으로 다시 배포
+  - 백엔드: GitHub `main`에 push한 뒤 Render 화면에서 **Manual Deploy → Deploy latest commit** (자동 배포 설정은 켜져 있지만 실제로는 동작하지 않는 경우가 있었음)
   - 화면: `04_웹_react\frontend`에서 `npx vercel deploy --prod` (Vercel 로그인 또는 토큰 필요)
 
 ## 폴더 구조
