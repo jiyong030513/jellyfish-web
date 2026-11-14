@@ -1,0 +1,28 @@
+# Render 배포 설정: 백엔드(FastAPI)만 Render에 올림. 화면(React)은 Vercel.
+# 비밀값(sync: false)은 Render 화면에서 직접 입력. CA 인증서는 Secret File(ca.pem)로 등록 → /etc/secrets/ca.pem
+services:
+  - type: web
+    name: jellyfish-api
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r 04_웹_react/backend/requirements.txt
+    startCommand: cd 04_웹_react/backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: MYSQL_HOST
+        sync: false
+      - key: MYSQL_PORT
+        sync: false
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PWD
+        sync: false
+      - key: MYSQL_DB
+        value: jellyfish
+      - key: MYSQL_SSL_CA
+        value: /etc/secrets/ca.pem
+      - key: ALLOWED_ORIGINS
+        sync: false

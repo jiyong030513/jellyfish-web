@@ -1,0 +1,11 @@
+streamlit>=1.50
+streamlit-folium>=0.20
+folium>=0.17
+altair>=5
+pymysql
+pandas
+pdfplumber
+requests
+numpy
+scikit-learn==1.9.1
+joblib

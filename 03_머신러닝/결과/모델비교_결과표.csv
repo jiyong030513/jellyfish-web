@@ -1,0 +1,25 @@
+﻿예측기간,모델,최종,valid_1위,세트,행수,급증수,AUC,PR_AUC,재현율,정밀도,하이퍼파라미터
+1,기준선,,,valid,149,14,0.692,0.268,0.714,0.179,{'C': 1.0}
+1,기준선,,,test,373,30,0.805,0.287,0.833,0.156,{'C': 1.0}
+1,Logistic,★,,valid,149,14,0.868,0.435,0.929,0.25,{'C': 0.01}
+1,Logistic,★,,test,373,30,0.786,0.346,0.8,0.149,{'C': 0.01}
+1,LightGBM,,◎,valid,149,14,0.874,0.54,0.571,0.333,"{'n_estimators': 100, 'learning_rate': 0.1, 'num_leaves': 7, 'min_child_samples': 10}"
+1,LightGBM,,◎,test,373,30,0.782,0.258,0.433,0.271,"{'n_estimators': 100, 'learning_rate': 0.1, 'num_leaves': 7, 'min_child_samples': 10}"
+1,XGBoost,,,valid,149,14,0.86,0.482,0.571,0.381,"{'n_estimators': 100, 'learning_rate': 0.1, 'max_depth': 5, 'min_child_weight': 5}"
+1,XGBoost,,,test,373,30,0.802,0.3,0.467,0.389,"{'n_estimators': 100, 'learning_rate': 0.1, 'max_depth': 5, 'min_child_weight': 5}"
+2,기준선,,,valid,137,15,0.702,0.229,0.667,0.185,{'C': 1.0}
+2,기준선,,,test,352,29,0.792,0.228,0.862,0.156,{'C': 1.0}
+2,Logistic,★,◎,valid,137,15,0.86,0.519,0.933,0.23,{'C': 0.3}
+2,Logistic,★,◎,test,352,29,0.763,0.306,0.759,0.133,{'C': 0.3}
+2,LightGBM,,,valid,137,15,0.848,0.343,0.6,0.257,"{'n_estimators': 100, 'learning_rate': 0.03, 'num_leaves': 7, 'min_child_samples': 30}"
+2,LightGBM,,,test,352,29,0.786,0.276,0.655,0.194,"{'n_estimators': 100, 'learning_rate': 0.03, 'num_leaves': 7, 'min_child_samples': 30}"
+2,XGBoost,,,valid,137,15,0.855,0.348,0.8,0.324,"{'n_estimators': 100, 'learning_rate': 0.03, 'max_depth': 3, 'min_child_weight': 5}"
+2,XGBoost,,,test,352,29,0.773,0.291,0.655,0.211,"{'n_estimators': 100, 'learning_rate': 0.03, 'max_depth': 3, 'min_child_weight': 5}"
+4,기준선,,,valid,127,20,0.575,0.213,0.6,0.2,{'C': 1.0}
+4,기준선,,,test,309,29,0.678,0.194,0.793,0.137,{'C': 1.0}
+4,Logistic,★,◎,valid,127,20,0.935,0.684,1.0,0.323,{'C': 0.01}
+4,Logistic,★,◎,test,309,29,0.762,0.29,0.828,0.171,{'C': 0.01}
+4,LightGBM,,,valid,127,20,0.808,0.59,0.45,0.643,"{'n_estimators': 300, 'learning_rate': 0.1, 'num_leaves': 15, 'min_child_samples': 30}"
+4,LightGBM,,,test,309,29,0.693,0.214,0.241,0.184,"{'n_estimators': 300, 'learning_rate': 0.1, 'num_leaves': 15, 'min_child_samples': 30}"
+4,XGBoost,,,valid,127,20,0.862,0.588,0.55,0.393,"{'n_estimators': 300, 'learning_rate': 0.03, 'max_depth': 3, 'min_child_weight': 1}"
+4,XGBoost,,,test,309,29,0.72,0.227,0.483,0.184,"{'n_estimators': 300, 'learning_rate': 0.03, 'max_depth': 3, 'min_child_weight': 1}"
