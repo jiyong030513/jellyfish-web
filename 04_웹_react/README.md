@@ -18,6 +18,26 @@ python run.py
 - API 문서(자동 생성): http://127.0.0.1:8000/docs
 - 필요한 파이썬 패키지: `pip install -r backend\requirements.txt` (FastAPI, uvicorn, pandas, numpy, pymysql)
 
+## 배포 (인터넷 공개)
+
+**공유 링크: https://jellyfish-web-one.vercel.app**  (예: `?beach=B149&date=2023-08-10`)
+
+| 역할 | 서비스 (모두 무료) | 주소 |
+|---|---|---|
+| 화면 (React) | Vercel | https://jellyfish-web-one.vercel.app |
+| 백엔드 (FastAPI) | Render (싱가포르) | https://jellyfish-api-e3lz.onrender.com (`/docs`에서 API 확인) |
+| DB | TiDB Cloud Starter (도쿄, MySQL 호환) | `02_웹_수집\.env`의 MYSQL_ 값 |
+
+- DB 이전: `02_웹_수집\클라우드_이전.py`가 내 PC MySQL의 테이블·데이터를 그대로 옮기고, 뷰 7개는 원본 SQL2_views.sql로 다시 만든다.
+  TiDB에는 공간 함수가 없어 v_해수욕장가중치의 `ST_Distance_Sphere`만 같은 하버사인 공식(반지름 6,370,986m)으로 바꿔 실행 (원본 파일은 그대로).
+  이전 후 테이블 11개·뷰 7개의 모든 값이 내 PC와 같음을 확인.
+- 비밀번호·키는 `02_웹_수집\.env`(GitHub에 올라가지 않음)와 Render 환경변수에만 있음.
+- 매주 갱신: `update_all.py`가 클라우드 DB에 직접 쓰고, 마지막에 Render의 `/api/reload`를 호출해 웹이 새 자료를 읽음.
+- Render 무료 서버는 15분간 접속이 없으면 잠든다. 그 뒤 첫 접속은 서버 깨우기 + DB 읽기로 1분 정도 걸림 (발표 전에 한 번 열어 두기).
+- 코드 수정 반영
+  - 백엔드: GitHub `main`에 push하면 Render가 자동으로 다시 배포
+  - 화면: `04_웹_react\frontend`에서 `npx vercel deploy --prod` (Vercel 로그인 또는 토큰 필요)
+
 ## 폴더 구조
 
 ```
