@@ -1,8 +1,6 @@
-streamlit>=1.50
-streamlit-folium>=0.20
-folium>=0.17
-altair>=5
 pymysql
+cryptography
+certifi
 pandas
 pdfplumber
 requests

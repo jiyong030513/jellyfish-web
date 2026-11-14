@@ -1,6 +1,6 @@
 """해파리 위험도 조회의 데이터 조회·계산 로직 (화면과 무관)
 
-Streamlit(app.py)과 React용 FastAPI 서버가 함께 쓴다. streamlit을 import하지 않는다.
+React 웹의 FastAPI 서버(04_웹_react/backend/main.py)가 import해서 쓴다.
 
 사용 예:
     from 서비스로직 import 전체_불러오기, 위험도서비스

@@ -1,6 +1,6 @@
 """해파리 위험도 조회 API (FastAPI)
 
-계산은 하지 않고 02_웹_수집의 서비스로직.py · db.py를 그대로 불러 쓴다 → Streamlit 화면과 숫자가 항상 같다.
+계산은 02_웹_수집의 서비스로직.py · db.py를 그대로 불러 쓴다 (DB 조회·위험도 계산은 서비스로직.py 한 곳에만).
 DB 접속 정보도 02_웹_수집/db.py에서만 읽는다.
 
 실행 (보통은 04_웹_react/run.py가 대신 켬):
@@ -143,7 +143,7 @@ def beach(beach_id: str, date: str = ""):
     기준일 = None if 모델.empty else 모델["기준일"].iloc[0]
     d["기준일"] = 기준일
     d["배지"] = f"{한글날짜(기준일)} 주간보고를 넣은 모델 예측" if 기준일 is not None else "평년 기준 전망"
-    # 화면 문구 (Streamlit app.py와 같은 형식. 반올림을 Python 한 곳에서만 하려고 문자열로 보냄)
+    # 화면 문구 (반올림을 Python 한 곳에서만 하려고 문자열로 만들어 보냄)
     p = d["평년"]
     if p:
         p["표시"] = {k: pct(p[k]) for k in ("통합", "노무라", "보름달", "기타")}

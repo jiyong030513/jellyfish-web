@@ -104,10 +104,15 @@ def 백업():
     out = os.path.join(BACKUP_DIR, f"jellyfish_{dt.datetime.now():%Y%m%d_%H%M}.sql")
     env = dict(os.environ, MYSQL_PWD=DB["password"])   # 비밀번호를 명령줄에 쓰지 않음
     if DB["host"] in ("localhost", "127.0.0.1"):
-        extra = ["--routines", "--triggers"]
-    else:   # 클라우드 DB(TiDB 등): 지원하지 않는 옵션은 끔 (이 DB에는 프로시저·트리거가 없음)
+        extra = ["--single-transaction", "--routines", "--triggers"]
+    else:   # 클라우드 DB(TiDB): 지원하지 않는 기능은 끔 (SAVEPOINT·테이블 잠금 없음, 이 DB에는 프로시저·트리거도 없음)
         extra = ["--set-gtid-purged=OFF", "--no-tablespaces", "--column-statistics=0", "--skip-add-locks",
-                 "--skip-routines", "--skip-triggers"]
-    subprocess.run([mysql_도구("mysqldump")] + 접속_옵션() + extra +
-                   ["--single-transaction", f"--result-file={out}", DB["database"]], env=env, check=True)
+                 "--skip-lock-tables", "--skip-routines", "--skip-triggers"]
+    try:
+        subprocess.run([mysql_도구("mysqldump")] + 접속_옵션() + extra +
+                       [f"--result-file={out}", DB["database"]], env=env, check=True)
+    except Exception:
+        if os.path.exists(out):
+            os.remove(out)                            # 실패한 반쪽 백업은 남기지 않음
+        raise
     return out
