@@ -176,9 +176,9 @@ def top(date: str = "", k: int = 4):
     return js({"제목": f"{k}주 뒤 · {대상['이름']} ({대상['범위']}) 위험 지수 상위 10곳", "목록": rows})
 
 
-@app.get("/api/health")
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 def health():
-    """서버가 살아 있는지 확인용 (배포 서비스의 상태 점검)"""
+    """서버가 살아 있는지 확인용 (Render 상태 점검 + UptimeRobot이 5분마다 접속해 서버가 잠들지 않게 함)"""
     return {"ok": True}
 
 
