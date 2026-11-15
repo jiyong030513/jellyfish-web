@@ -33,7 +33,9 @@ python run.py
   이전 후 테이블 11개·뷰 7개의 모든 값이 내 PC와 같음을 확인.
 - 비밀번호·키는 `02_웹_수집\.env`(GitHub에 올라가지 않음)와 Render 환경변수에만 있음.
 - 매주 갱신: `update_all.py`가 클라우드 DB에 직접 쓰고, 마지막에 Render의 `/api/reload`를 호출해 웹이 새 자료를 읽음.
-- Render 무료 서버는 15분간 접속이 없으면 잠든다. 그 뒤 첫 접속은 서버 깨우기 + DB 읽기로 1분 정도 걸림 (발표 전에 한 번 열어 두기).
+- Render 무료 서버는 15분간 접속이 없으면 잠든다 (깨우는 데 1분 정도).
+  → UptimeRobot(무료)이 5분마다 `https://jellyfish-api-e3lz.onrender.com/api/health`에 접속해 잠들지 않게 함.
+  Render 무료는 월 750시간이라 서버 1대를 24시간 켜 둬도 한도 안 (다른 무료 서버를 추가하면 시간을 나눠 씀).
 - 코드 수정 반영
   - 백엔드: GitHub `main`에 push한 뒤 Render 화면에서 **Manual Deploy → Deploy latest commit** (자동 배포 설정은 켜져 있지만 실제로는 동작하지 않는 경우가 있었음)
   - 화면: `04_웹_react\frontend`에서 `npx vercel deploy --prod` (Vercel 로그인 또는 토큰 필요)
