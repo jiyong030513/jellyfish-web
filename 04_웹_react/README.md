@@ -104,8 +104,9 @@ python run.py
 
 ## AI 해파리 상담봇 (`backend/jellycast/`, `POST /api/chat`)
 - RAG: 예보(서비스로직 자료, 화면과 같은 숫자) + 대비수칙 자료(`backend/jellycast/knowledge/*.md`) 검색 → Gemini 답변 + 서버가 출처 첨부
-- 요청: `{ message, beach_id?: "B149", horizon_weeks?: 1|2|4, history?: [{role, text}] }` → 응답: `{ answer, emergency, forecast, sources }`
+- 요청: `{ message, beach_id?: "B149", horizon_weeks?: 1|2|4, date?: "2023-08-10", history?: [{role, text}] }` (date = 화면에서 고른 날짜 → 화면과 같은 숫자)
+- 답: 예보 + 시즌(평년 출현율 최고 주) + 위험 낮은 곳 추천(지역 없으면 전국), 답 아래 📍해수욕장 버튼 → 지도 이동 → 응답: `{ answer, emergency, forecast, sources }`
 - `emergency: true`면 화면 맨 위에 119 배너 (ChatBot.tsx)
 - 비밀값: `GEMINI_API_KEY`, `GEMINI_MODEL`(gemini-3.5-flash-lite)은 `02_웹_수집\.env`와 Render 환경변수에만
 - `knowledge/` 6개 파일(답변원칙·응급처치·대처요령·예방수칙·출현정보·독성해파리) 포함. 없으면 `/api/chat`만 503
-- 테스트: `cd backend && pytest -q` (DB·키 없이 6개)
+- 테스트: `cd backend && pytest -q` (DB·키 없이 7개)
