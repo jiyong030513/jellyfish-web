@@ -98,12 +98,14 @@ def beach_forecast(beach_id: str) -> list[dict]:
     return _rows(p[p["해수욕장ID"] == beach_id].sort_values("예측기간"), 오늘)
 
 
-def safer_beaches(region: str, horizon: int, limit: int = 3) -> list[dict]:
-    """같은 지역에서 k주 뒤 위험 지수가 낮은 해수욕장 (대안 추천용)"""
+def safer_beaches(region: str | None, horizon: int, limit: int = 3) -> list[dict]:
+    """같은 지역(region=None이면 전국)에서 k주 뒤 위험 지수가 낮은 해수욕장 (대안 추천용)"""
     오늘 = dt.date.today()
     s = _svc()
-    patterns = REGIONS.get(region, [region])
-    ids = set(s.해수욕장.loc[s.해수욕장["시도명"].str.contains("|".join(patterns)), "해수욕장ID"])
     p = _provider["예측표"](오늘)
-    p = p[p["해수욕장ID"].isin(ids) & (p["예측기간"] == horizon) & p["정렬지수"].notna()]
+    if region:
+        patterns = REGIONS.get(region, [region])
+        ids = set(s.해수욕장.loc[s.해수욕장["시도명"].str.contains("|".join(patterns)), "해수욕장ID"])
+        p = p[p["해수욕장ID"].isin(ids)]
+    p = p[(p["예측기간"] == horizon) & p["정렬지수"].notna()]
     return _rows(p.sort_values("정렬지수").head(limit), 오늘)

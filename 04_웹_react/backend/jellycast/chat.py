@@ -109,6 +109,8 @@ def collect_forecast(req: ChatRequest) -> list[dict]:
             alts = [r for r in forecast.safer_beaches(region, horizon, limit=3 + len(asked))
                     if r["beach_name"] not in asked][:3]
             rows += [r | {"kind": f"{region} 위험 낮은 곳"} for r in alts]
+        if not rows:  # "해변 추천해줘"처럼 지역·해수욕장이 없으면 전국에서 위험 낮은 곳
+            rows = [r | {"kind": "전국 위험 낮은 곳"} for r in forecast.safer_beaches(None, horizon, limit=5)]
         return rows
     except Exception as e:  # DB 연결 실패 등
         log.warning("예보 조회 실패: %s", e)
