@@ -106,6 +106,6 @@ python run.py
 - RAG: 예보(서비스로직 자료, 화면과 같은 숫자) + 대비수칙 자료(`backend/jellycast/knowledge/*.md`) 검색 → Gemini 답변 + 서버가 출처 첨부
 - 요청: `{ message, beach_id?: "B149", horizon_weeks?: 1|2|4, history?: [{role, text}] }` → 응답: `{ answer, emergency, forecast, sources }`
 - `emergency: true`면 화면 맨 위에 119 배너 (ChatBot.tsx)
-- 비밀값: `GEMINI_API_KEY`, `GEMINI_MODEL`(gemini-3.5-flash)은 `02_웹_수집\.env`와 Render 환경변수에만
-- `knowledge/`가 없으면 `/api/chat`만 503, 나머지 기능은 정상. 자료를 넣은 뒤 GitHub push → Render 수동 배포
+- 비밀값: `GEMINI_API_KEY`, `GEMINI_MODEL`(gemini-3.5-flash-lite)은 `02_웹_수집\.env`와 Render 환경변수에만
+- `knowledge/` 6개 파일(답변원칙·응급처치·대처요령·예방수칙·출현정보·독성해파리) 포함. 없으면 `/api/chat`만 503
 - 테스트: `cd backend && pytest -q` (DB·키 없이 6개)

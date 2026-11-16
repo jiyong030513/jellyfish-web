@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 router = APIRouter()
 
 KNOWLEDGE_DIR = os.environ.get("KNOWLEDGE_DIR", Path(__file__).resolve().parent / "knowledge")
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 _kb: dict = {}
 
 
@@ -153,7 +153,8 @@ def call_llm(system: str, history: list[Turn], prompt: str) -> str:
         contents=contents,
         # Gemini 3.x는 답하기 전에 '생각'에 토큰을 쓰는데, 그게 출력 한도를 다 써서 답이 잘렸음 → 생각 끔 + 한도 여유
         config=types.GenerateContentConfig(system_instruction=system, temperature=0.3, max_output_tokens=1500,
-                                           thinking_config=types.ThinkingConfig(thinking_budget=0)),
+                                           # flash: 생각에 토큰을 다 써 답이 잘리므로 끔 / flash-lite: 원래 생각 안 함(이 설정을 주면 400 오류)
+                                           thinking_config=None if "lite" in MODEL else types.ThinkingConfig(thinking_budget=0)),
     )
     return (resp.text or "").strip()
 
