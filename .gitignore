@@ -18,3 +18,6 @@ __pycache__/
 
 # Vercel 연결 정보
 .vercel/
+
+# 친구가 보낸 원본 상담봇 폴더 (.env.example에 실제 Gemini 키가 있음 → 올리지 않음)
+jellycast-chat/

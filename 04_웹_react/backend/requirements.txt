@@ -7,3 +7,9 @@ numpy
 pymysql
 cryptography
 certifi
+# AI 상담봇 (jellycast/): Gemini 호출 + 대비수칙 검색(TF-IDF)
+google-genai>=1.0
+scikit-learn
+# 테스트: pytest -q
+pytest
+httpx

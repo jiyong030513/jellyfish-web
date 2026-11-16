@@ -34,6 +34,20 @@ export async function get<T>(path: string, params: Record<string, string | numbe
   return r.json();
 }
 
+// AI 해파리 상담봇 (POST /api/chat)
+export type ChatTurn = { role: "user" | "model"; text: string };
+export type ChatForecast = { beach_name: string; horizon_weeks: number; target_week: string; risk_text: string; risk_level: string; kind: string };
+export type ChatRes = { answer: string; emergency: boolean; forecast: ChatForecast[]; sources: { 기관: string; url: string }[] };
+
+export async function chat(body: { message: string; beach_id?: string | null; horizon_weeks?: number; history: ChatTurn[] }): Promise<ChatRes> {
+  const r = await fetch(`${API}/api/chat`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!r.ok) {
+    const d = await r.json().catch(() => null);
+    throw new Error(d?.detail && typeof d.detail === "string" ? d.detail : `상담봇 오류 (${r.status})`);
+  }
+  return r.json();
+}
+
 export async function reload(): Promise<Meta> {
   const r = await fetch(`${API}/api/reload`, { method: "POST" });
   if (!r.ok) throw new Error(`reload → ${r.status}`);

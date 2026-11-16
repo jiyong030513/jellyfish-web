@@ -5,6 +5,7 @@ import Search from "./Search";
 import Detail from "./Detail";
 import Curve from "./Curve";
 import SqlPanel from "./SqlPanel";
+import ChatBot from "./ChatBot";
 import { Badge } from "./ui";
 
 const 오늘 = () => {
@@ -140,6 +141,7 @@ export default function App() {
       )}
 
       <SqlPanel ver={ver} />
+      <ChatBot beachId={sel} beachName={selBeach?.해수욕장명} k={k} />
     </div>
   );
 }

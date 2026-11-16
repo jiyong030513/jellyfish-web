@@ -47,6 +47,8 @@ def _startup():
 
 
 def svc():
+    if _state["svc"] is None:          # 서버 시작 전 테스트 등
+        _load()
     return _state["svc"]
 
 
@@ -174,6 +176,15 @@ def top(date: str = "", k: int = 4):
          "값": r.예측위험지수, "상한전": r.정렬지수, "표시": r.표시, "방식": r.방식,
          "등급": 등급_구하기(r.예측위험지수)[0], "색": 등급_구하기(r.예측위험지수)[1]} for r in t.itertuples()]
     return js({"제목": f"{k}주 뒤 · {대상['이름']} ({대상['범위']}) 위험 지수 상위 10곳", "목록": rows})
+
+
+# ---------------------------------------------------------------- AI 해파리 상담봇 (RAG + Gemini): POST /api/chat
+# 예보 숫자는 위와 같은 자료(svc, 예측표)를 써서 화면과 항상 같다. 대비수칙 자료는 jellycast/knowledge/
+from jellycast import forecast as _jc_forecast  # noqa: E402
+from jellycast.chat import router as chat_router  # noqa: E402
+
+_jc_forecast.연결(svc, 예측표)
+app.include_router(chat_router, prefix="/api")
 
 
 @app.api_route("/api/health", methods=["GET", "HEAD"])
