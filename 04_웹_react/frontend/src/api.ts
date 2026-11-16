@@ -36,10 +36,10 @@ export async function get<T>(path: string, params: Record<string, string | numbe
 
 // AI 해파리 상담봇 (POST /api/chat)
 export type ChatTurn = { role: "user" | "model"; text: string };
-export type ChatForecast = { beach_name: string; horizon_weeks: number; target_week: string; risk_text: string; risk_level: string; kind: string };
+export type ChatForecast = { beach_id: string; beach_name: string; horizon_weeks: number; target_week: string; risk_text: string; risk_level: string; kind: string };
 export type ChatRes = { answer: string; emergency: boolean; forecast: ChatForecast[]; sources: { 기관: string; url: string }[] };
 
-export async function chat(body: { message: string; beach_id?: string | null; horizon_weeks?: number; history: ChatTurn[] }): Promise<ChatRes> {
+export async function chat(body: { message: string; beach_id?: string | null; horizon_weeks?: number; date?: string; history: ChatTurn[] }): Promise<ChatRes> {
   const r = await fetch(`${API}/api/chat`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   if (!r.ok) {
     const d = await r.json().catch(() => null);

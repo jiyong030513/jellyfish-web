@@ -7,6 +7,8 @@
 """
 from __future__ import annotations
 
+import datetime as dt
+
 import logging
 import os
 from pathlib import Path
@@ -73,6 +75,7 @@ class ChatRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=1000)
     beach_id: str | None = Field(None, max_length=10)   # 화면에서 선택한 해수욕장ID (예: "B149")
     horizon_weeks: Literal[1, 2, 4] | None = None
+    date: dt.date | None = None                         # 화면에서 고른 날짜 (없으면 오늘) → 상담봇 숫자 = 화면 숫자
     history: list[Turn] = Field(default_factory=list, max_length=10)
 
 
@@ -100,17 +103,17 @@ def collect_forecast(req: ChatRequest) -> list[dict]:
         ids = [req.beach_id] if req.beach_id else []
         ids += [b["beach_id"] for b in forecast.find_beaches(req.message) if b["beach_id"] not in ids]
         for bid in ids[:2]:
-            rows += [r | {"kind": "요청 해수욕장"} for r in forecast.beach_forecast(bid)]
+            rows += [r | {"kind": "요청 해수욕장"} for r in forecast.beach_forecast(bid, req.date)]
         region = forecast.find_region(req.message)
         if region is None and rows:
             region = rows[0].get("sido")
         if region:
             asked = {r["beach_name"] for r in rows}
-            alts = [r for r in forecast.safer_beaches(region, horizon, limit=3 + len(asked))
+            alts = [r for r in forecast.safer_beaches(region, horizon, limit=3 + len(asked), 날짜=req.date)
                     if r["beach_name"] not in asked][:3]
             rows += [r | {"kind": f"{region} 위험 낮은 곳"} for r in alts]
         if not rows:  # "해변 추천해줘"처럼 지역·해수욕장이 없으면 전국에서 위험 낮은 곳
-            rows = [r | {"kind": "전국 위험 낮은 곳"} for r in forecast.safer_beaches(None, horizon, limit=5)]
+            rows = [r | {"kind": "전국 위험 낮은 곳"} for r in forecast.safer_beaches(None, horizon, limit=5, 날짜=req.date)]
         return rows
     except Exception as e:  # DB 연결 실패 등
         log.warning("예보 조회 실패: %s", e)
@@ -132,9 +135,24 @@ def format_forecast(rows: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def season_text(rows: list[dict]) -> str:
+    """요청 해수욕장의 시즌(평년 출현율이 가장 높은 주) — '언제 위험해?' 같은 질문용"""
+    out = []
+    for bid in dict.fromkeys(r["beach_id"] for r in rows if r.get("kind") == "요청 해수욕장"):
+        try:
+            sz = forecast.season(bid)
+            out.append(f"- {sz['beach_name']} 평년 출현율이 가장 높은 주: " + " / ".join(sz["peak"]))
+        except Exception as e:
+            log.warning("시즌 조회 실패: %s", e)
+    return "\n".join(out) or "(없음)"
+
+
 def build_prompt(req: ChatRequest, rows: list[dict], chunks) -> str:
     docs = "\n\n".join(c.as_context() for c in chunks) or "(관련 자료 없음)"
-    return (f"[예보 데이터]\n{format_forecast(rows)}\n\n"
+    기준 = req.date or dt.date.today()
+    return (f"[기준 날짜] {기준:%Y-%m-%d} (사용자가 화면에서 고른 날짜. '다음 주'는 이 날짜 기준)\n\n"
+            f"[예보 데이터]\n{format_forecast(rows)}\n\n"
+            f"[시즌 자료: 2014년부터 주간보고로 계산한 평년 출현율, 시기를 물을 때만 사용]\n{season_text(rows)}\n\n"
             f"[대비수칙 자료]\n{docs}\n\n"
             f"[질문]\n{req.message}")
 

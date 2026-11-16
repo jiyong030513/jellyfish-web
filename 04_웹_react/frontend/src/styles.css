@@ -179,3 +179,6 @@ pre { background: #0B2545; color: #E3ECF2; padding: 12px 14px; border-radius: 10
   .chat-box { right: 0; bottom: 0; width: 100vw; height: 100dvh; border-radius: 0; }
   .chat-fab { right: 12px; bottom: 12px; }
 }
+
+.chat-beaches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chat-beaches .chat-chip { display: inline-block; width: auto; margin: 0; padding: 4px 10px; font-size: 13px; }

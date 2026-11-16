@@ -91,16 +91,16 @@ def _rows(p, 오늘) -> list[dict]:
     return out
 
 
-def beach_forecast(beach_id: str) -> list[dict]:
-    """선택한 해수욕장의 오늘 기준 1·2·4주 뒤 (화면 상세 패널과 같은 값)"""
-    오늘 = dt.date.today()
+def beach_forecast(beach_id: str, 날짜: dt.date | None = None) -> list[dict]:
+    """선택한 해수욕장의 1·2·4주 뒤 (화면에서 고른 날짜 기준, 없으면 오늘 → 상세 패널과 같은 값)"""
+    오늘 = 날짜 or dt.date.today()
     p = _provider["예측표"](오늘)
     return _rows(p[p["해수욕장ID"] == beach_id].sort_values("예측기간"), 오늘)
 
 
-def safer_beaches(region: str | None, horizon: int, limit: int = 3) -> list[dict]:
+def safer_beaches(region: str | None, horizon: int, limit: int = 3, 날짜: dt.date | None = None) -> list[dict]:
     """같은 지역(region=None이면 전국)에서 k주 뒤 위험 지수가 낮은 해수욕장 (대안 추천용)"""
-    오늘 = dt.date.today()
+    오늘 = 날짜 or dt.date.today()
     s = _svc()
     p = _provider["예측표"](오늘)
     if region:
@@ -109,3 +109,13 @@ def safer_beaches(region: str | None, horizon: int, limit: int = 3) -> list[dict
         p = p[p["해수욕장ID"].isin(ids)]
     p = p[(p["예측기간"] == horizon) & p["정렬지수"].notna()]
     return _rows(p.sort_values("정렬지수").head(limit), 오늘)
+
+
+def season(beach_id: str) -> dict:
+    """시즌 안내: 5~12월 평년 출현율 곡선(v_해수욕장주간위험도)에서 가장 높은 주 3개 (화면 그래프와 같은 자료)"""
+    s = _svc()
+    c = s.곡선(beach_id).dropna(subset=["통합출현율"])
+    top = c.sort_values("통합출현율", ascending=False).head(3)
+    return {"beach_name": s.B.loc[beach_id].해수욕장명,
+            "peak": [f"{r.주차명} {r.통합출현율 * 100:.1f}% (노무라 {r.노무라 * 100:.1f}%, 보름달 {r.보름달 * 100:.1f}%)"
+                     for r in top.itertuples()]}

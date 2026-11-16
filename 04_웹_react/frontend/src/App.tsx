@@ -141,7 +141,7 @@ export default function App() {
       )}
 
       <SqlPanel ver={ver} />
-      <ChatBot beachId={sel} beachName={selBeach?.해수욕장명} k={k} />
+      <ChatBot beachId={sel} beachName={selBeach?.해수욕장명} k={k} date={date} onPick={setSel} />
     </div>
   );
 }

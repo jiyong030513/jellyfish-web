@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { chat, type ChatRes, type ChatTurn } from "./api";
 
 type Msg = { role: "user" | "model"; text: string; res?: ChatRes; error?: boolean };
-type Props = { beachId: string | null; beachName?: string; k: number };
+type Props = { beachId: string | null; beachName?: string; k: number; date: string; onPick: (id: string) => void };
 
-const 예시 = ["해운대 다음 주 괜찮아?", "해파리에 쏘이면 어떻게 해요?", "해파리 예방하려면 뭘 입어야 해?"];
+const 예시 = ["해운대 다음 주 괜찮아?", "해운대는 언제 해파리가 제일 많아?", "부산 해변 추천해줘", "해파리에 쏘이면 어떻게 해요?"];
 
 // 오른쪽 아래 AI 해파리 상담봇. 선택한 해수욕장·예측 기간을 같이 보내고, 응급이면 119 배너를 띄운다.
-export default function ChatBot({ beachId, beachName, k }: Props) {
+export default function ChatBot({ beachId, beachName, k, date, onPick }: Props) {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
@@ -25,7 +25,7 @@ export default function ChatBot({ beachId, beachName, k }: Props) {
     setText("");
     setBusy(true);
     try {
-      const res = await chat({ message: q, beach_id: beachId, horizon_weeks: k, history });
+      const res = await chat({ message: q, beach_id: beachId, horizon_weeks: k, date, history });
       setMsgs((m) => [...m, { role: "model", text: res.answer, res }]);
     } catch (e) {
       setMsgs((m) => [...m, { role: "model", text: e instanceof Error ? e.message : "오류가 났어요", error: true }]);
@@ -43,7 +43,7 @@ export default function ChatBot({ beachId, beachName, k }: Props) {
       <div className="chat-head">
         <div>
           <b>AI 해파리 상담</b>
-          <div className="chat-sub">{beachName ? `${beachName} · ${k}주 뒤 기준` : "해수욕장을 고르면 그곳 예보로 답해요"}</div>
+          <div className="chat-sub">{beachName ? `${beachName} · ${date} · ${k}주 뒤 기준` : `${date} 기준 · 해수욕장을 고르면 그곳 예보로 답해요`}</div>
         </div>
         <button onClick={() => setOpen(false)} aria-label="닫기">✕</button>
       </div>
@@ -62,6 +62,15 @@ export default function ChatBot({ beachId, beachName, k }: Props) {
         {msgs.map((m, i) => (
           <div key={i} className={`chat-msg ${m.role}${m.error ? " err" : ""}`}>
             <div className="chat-text">{m.text}</div>
+            {m.res && m.res.forecast.length > 0 && (
+              <div className="chat-beaches">
+                {[...new Map(m.res.forecast.map((f) => [f.beach_id, f])).values()].map((f) => (
+                  <button key={f.beach_id} className="chat-chip" onClick={() => { onPick(f.beach_id); if (window.innerWidth < 480) setOpen(false); }} title="지도에서 보기">
+                    📍 {f.beach_name}
+                  </button>
+                ))}
+              </div>
+            )}
             {m.res && m.res.sources.length > 0 && (
               <div className="chat-src">
                 출처: {m.res.sources.map((s, j) => (

@@ -35,9 +35,10 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setattr(chat, "KNOWLEDGE_DIR", kb)
     chat._kb.clear()
     monkeypatch.setattr(forecast, "beaches", lambda: [{"beach_id": "B149", "beach_name": "해운대", "sido": "부산시"}])
-    monkeypatch.setattr(forecast, "beach_forecast", lambda bid: FAKE.get(bid, []))
-    monkeypatch.setattr(forecast, "safer_beaches", lambda region, h, limit=3: [])
+    monkeypatch.setattr(forecast, "beach_forecast", lambda bid, 날짜=None: FAKE.get(bid, []))
+    monkeypatch.setattr(forecast, "safer_beaches", lambda region, h, limit=3, 날짜=None: [])
     calls = []
+    monkeypatch.setattr(forecast, "season", lambda bid: {"beach_name": "해운대", "peak": ["8월 1주 51.5%"]})
     monkeypatch.setattr(chat, "call_llm", lambda system, history, prompt: calls.append(prompt) or "가짜 답변")
     c = TestClient(main.app)          # with 없이 → 서버 시작(DB 읽기)을 하지 않음
     c.calls = calls
@@ -87,3 +88,9 @@ def test_자료_없으면_상담봇만_503(client, monkeypatch, tmp_path):
 def test_질문_검증(client):
     assert client.post("/api/chat", json={"message": ""}).status_code == 422
     assert client.post("/api/chat", json={"message": "a", "horizon_weeks": 3}).status_code == 422
+
+
+def test_화면_날짜와_시즌이_프롬프트에_들어간다(client):
+    r = client.post("/api/chat", json={"message": "해운대 언제 많아?", "beach_id": "B149", "date": "2023-08-10"})
+    assert r.status_code == 200
+    assert "[기준 날짜] 2023-08-10" in client.calls[-1] and "8월 1주 51.5%" in client.calls[-1]
