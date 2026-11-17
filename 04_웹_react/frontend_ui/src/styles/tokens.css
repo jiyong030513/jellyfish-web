@@ -1,0 +1,291 @@
+/* ==========================================================================
+   해수욕장 해파리 위험도 — Jellyfish 디자인 토큰
+   출처: Figma「해수욕장해파리위험도_공유본」> 해수욕장해파리위험도_데스크톱_수정본_수정
+         스타일(Jellyfish/Type·Color·Surface·Gradient·Effect) + 변수(type/·color/·spacing/·radius/·size/)
+   확인일: 2026-11-17
+   사용법: 앱 진입점(main.jsx 등)에서  import './tokens.css';
+   ========================================================================== */
+
+/* ---------- 글꼴 ---------- */
+/* Pretendard (본문 전체), Inter (차트 눈금 전용) */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap");
+
+:root {
+  /* ======================= 글꼴 패밀리 (font/family/*) ======================= */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-chart: "Inter", "Pretendard Variable", Pretendard, sans-serif;
+
+  /* ======================= 색상 (Jellyfish/Color/*) ======================= */
+  /* background */
+  --color-background-page: #050506;
+  --color-background-card: #111115;
+  --color-background-raised: #19191E;
+
+  /* glass */
+  --color-glass-top-base: rgba(13, 14, 20, 0.62);
+  --color-glass-top-border: rgba(184, 206, 255, 0.20);
+  --color-glass-bottom-base: rgba(12, 13, 18, 0.68);
+  --color-glass-bottom-border: rgba(155, 178, 255, 0.14);
+
+  /* border */
+  --color-border-subtle: #25252A;
+  --color-border-default: #303036;
+  --color-border-strong: #404048;
+
+  /* foreground */
+  --color-foreground-inverse: #111115;
+  --color-foreground-primary: #F5F5F7;
+  --color-foreground-secondary: #B8B8C1;
+
+  /* action */
+  --color-action-primary-background: #F5F5F7;
+
+  /* text */
+  --color-text-placeholder: #8F8F99;
+  --color-text-muted: #85858F;
+  --color-text-hint: #707079;
+  --color-text-disabled: #64646D;
+
+  /* risk (위험 등급) */
+  --color-risk-very-high: #EF4444;   /* 매우 높음 60% 이상 */
+  --color-risk-high: #F97316;        /* 높음 40% 이상 60% 미만 */
+  --color-risk-medium: #EAB308;      /* 보통 20% 이상 40% 미만 */
+  --color-risk-low: #22C55E;         /* 낮음 0% 이상 20% 미만 */
+  --color-risk-no-data: #94A3B8;     /* 자료 없음 / 시즌 아님 */
+  --color-risk-low-background: #9FF3D0;  /* '낮음' 배지 배경 */
+  --color-risk-low-text: #092D25;        /* '낮음' 배지 글자 */
+
+  /* chart */
+  --color-chart-selected-line: #F97316;
+  --color-chart-total: #E2E8F0;
+  --color-chart-nomura: #F87171;
+  --color-chart-moon: #65C8D0;
+  --color-chart-other: #9CA3AF;
+  --color-chart-axis-fill: #000000;
+  --color-chart-grid: #2D2D34;
+  --color-chart-axis: #777781;
+  --color-chart-selected-label: #FB923C;
+
+  /* map */
+  --color-map-background: #DCE8E9;
+  --color-map-fallback: #DDDDDD;
+  --color-map-scale-background: rgba(255, 255, 255, 0.88);
+  --color-map-foreground: #24324B;
+  --color-map-attribution-background: rgba(255, 255, 255, 0.80);
+  --color-map-link: #0078A8;
+  --color-map-control-background: #FFFFFF;
+  --color-map-tooltip-text: #18243A;
+  --color-map-provider-blue: #4C7BE1;
+  --color-map-provider-yellow: #FFD500;
+  --color-map-provider-ochre: #E0BC00;
+
+  /* utility / example / loading */
+  --color-utility-transparent: rgba(0, 0, 0, 0);
+  --color-example-background: #2B2521;  /* '예시 데이터' 배지 배경 */
+  --color-example-text: #F0A56B;        /* '예시 데이터' 배지 글자 */
+  --color-loading-base: #303036;        /* 스켈레톤 기본 */
+  --color-loading-highlight: #404048;   /* 스켈레톤 하이라이트 */
+
+  /* ======================= 그라데이션 (Jellyfish/Gradient/*) ======================= */
+  /* 각도·위치는 Figma 패널 미리보기 기준. 유리 도형은 도형 자체도 회전돼 있음(아래 .glass-* 참고) */
+  --gradient-page-ambient: radial-gradient(circle closest-side, rgba(54, 71, 104, 0.08) 0%, rgba(54, 71, 104, 0) 28%);
+  --gradient-glass-cool: linear-gradient(40deg, rgba(75, 127, 255, 0) 50.25%, rgba(75, 127, 255, 0.34) 67.29%, rgba(141, 91, 255, 0.40) 91.42%);
+  --gradient-glass-warm: linear-gradient(136deg, rgba(255, 130, 54, 0.40) 20.7%, rgba(255, 130, 54, 0) 34.84%);
+  --gradient-glass-violet: linear-gradient(156deg, rgba(137, 74, 255, 0) 53.88%, rgba(137, 74, 255, 0.28) 75.09%, rgba(255, 116, 44, 0.30) 91.76%);
+  --gradient-glass-blue: linear-gradient(32deg, rgba(60, 111, 255, 0.35) 18.9%, rgba(60, 111, 255, 0) 42.12%);
+
+  /* ======================= 효과 (Jellyfish/Effect/*) ======================= */
+  --shadow-glass-top:
+    0 28px 90px 0 rgba(0, 0, 0, 0.70),
+    -26px 22px 54px 0 rgba(255, 104, 40, 0.12),
+    20px -16px 44px 0 rgba(68, 105, 255, 0.16);
+  --shadow-glass-bottom:
+    0 -26px 80px 0 rgba(0, 0, 0, 0.72),
+    -20px 20px 52px 0 rgba(106, 68, 255, 0.18);
+  --shadow-card-outline: 0 0 0 1px #303036;
+  --shadow-map-marker: 0 3px 12px 0 rgba(21, 56, 112, 0.40);
+  --shadow-map-tooltip: 0 4px 12px 0 rgba(26, 42, 62, 0.22);
+  --shadow-map-control: 0 4px 16px 0 rgba(24, 39, 58, 0.18);
+
+  /* ======================= 간격 (spacing/*) ======================= */
+  --spacing-0: 0px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+
+  /* ======================= 모서리 (radius/*) ======================= */
+  --radius-0: 0px;
+  --radius-8: 8px;    /* 지도 이름표 */
+  --radius-12: 12px;  /* 지도 확대/축소 버튼 */
+  --radius-16: 16px;  /* 지도 마커(32px 원) */
+  --radius-20: 20px;  /* 카드 */
+
+  /* ======================= 테두리·크기 (border/width/*, size/*) ======================= */
+  --border-width-1: 1px;
+  --border-width-4: 4px;
+  --size-page-width: 1440px;
+  --size-content-width: 1344px;   /* 페이지 좌우 여백 48px */
+  --size-map-control: 44px;
+  --size-glass-top-width: 510px;
+  --size-glass-top-height: 350px;
+  --size-glass-bottom-width: 650px;
+  --size-glass-bottom-height: 330px;
+
+  /* ======================= 텍스트 스타일 (Jellyfish/Type/*) ======================= */
+  /* 형식: --type-<이름>-weight / -size / -line-height / -tracking */
+  --type-display-weight: 700;          --type-display-size: 56px;          --type-display-line-height: 72px;          --type-display-tracking: -2px;
+  --type-metric-weight: 700;           --type-metric-size: 64px;           --type-metric-line-height: 72px;           --type-metric-tracking: -3px;
+  --type-beach-title-weight: 700;      --type-beach-title-size: 32px;      --type-beach-title-line-height: 40px;      --type-beach-title-tracking: -1px;
+  --type-forecast-metric-weight: 800;  --type-forecast-metric-size: 24px;  --type-forecast-metric-line-height: 32px;  --type-forecast-metric-tracking: -1px;
+  --type-section-title-weight: 700;    --type-section-title-size: 20px;    --type-section-title-line-height: 28px;    --type-section-title-tracking: 0px;
+  --type-section-subtitle-weight: 600; --type-section-subtitle-size: 20px; --type-section-subtitle-line-height: 28px; --type-section-subtitle-tracking: 0px;
+  --type-brand-weight: 700;            --type-brand-size: 16px;            --type-brand-line-height: 24px;            --type-brand-tracking: 0px;
+  --type-body-large-weight: 400;       --type-body-large-size: 16px;       --type-body-large-line-height: 24px;       --type-body-large-tracking: 0px;
+  --type-input-weight: 400;            --type-input-size: 16px;            --type-input-line-height: normal;          --type-input-tracking: 0px;
+  --type-navigation-weight: 600;       --type-navigation-size: 14px;       --type-navigation-line-height: 20px;       --type-navigation-tracking: 0px;
+  --type-button-weight: 700;           --type-button-size: 14px;           --type-button-line-height: 20px;           --type-button-tracking: 0px;
+  --type-button-strong-weight: 800;    --type-button-strong-size: 14px;    --type-button-strong-line-height: 20px;    --type-button-strong-tracking: 0px;
+  --type-label-medium-weight: 500;     --type-label-medium-size: 14px;     --type-label-medium-line-height: 20px;     --type-label-medium-tracking: 0px;
+  --type-body-weight: 400;             --type-body-size: 14px;             --type-body-line-height: 20px;             --type-body-tracking: 0px;
+  --type-eyebrow-weight: 700;          --type-eyebrow-size: 12px;          --type-eyebrow-line-height: 20px;          --type-eyebrow-tracking: 1px;
+  --type-label-weight: 700;            --type-label-size: 12px;            --type-label-line-height: 20px;            --type-label-tracking: 0px;
+  --type-badge-weight: 800;            --type-badge-size: 12px;            --type-badge-line-height: 20px;            --type-badge-tracking: 0px;
+  --type-body-small-weight: 400;       --type-body-small-size: 12px;       --type-body-small-line-height: 20px;       --type-body-small-tracking: 0px;
+  --type-chart-axis-weight: 400;       --type-chart-axis-size: 11px;       --type-chart-axis-line-height: 14px;       --type-chart-axis-tracking: 0px;
+  --type-caption-wide-weight: 400;     --type-caption-wide-size: 10px;     --type-caption-wide-line-height: 20px;     --type-caption-wide-tracking: 0px;
+  --type-example-badge-weight: 700;    --type-example-badge-size: 10px;    --type-example-badge-line-height: 16px;    --type-example-badge-tracking: 0px;
+  --type-map-caption-weight: 400;      --type-map-caption-size: 10px;      --type-map-caption-line-height: 14px;      --type-map-caption-tracking: 0px;
+  --type-map-attribution-weight: 400;  --type-map-attribution-size: 10px;  --type-map-attribution-line-height: 11px;  --type-map-attribution-tracking: 0px;
+  --type-map-control-weight: 500;      --type-map-control-size: 24px;      --type-map-control-line-height: 24px;      --type-map-control-tracking: 0px;
+}
+
+/* ---------- 기본 ---------- */
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-foreground-primary);
+  background-color: var(--color-background-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   텍스트 스타일 클래스  (예: <h1 className="text-display">)
+   ========================================================================== */
+.text-display          { font: var(--type-display-weight) var(--type-display-size)/var(--type-display-line-height) var(--font-sans); letter-spacing: var(--type-display-tracking); }
+.text-metric           { font: var(--type-metric-weight) var(--type-metric-size)/var(--type-metric-line-height) var(--font-sans); letter-spacing: var(--type-metric-tracking); }
+.text-beach-title      { font: var(--type-beach-title-weight) var(--type-beach-title-size)/var(--type-beach-title-line-height) var(--font-sans); letter-spacing: var(--type-beach-title-tracking); }
+.text-forecast-metric  { font: var(--type-forecast-metric-weight) var(--type-forecast-metric-size)/var(--type-forecast-metric-line-height) var(--font-sans); letter-spacing: var(--type-forecast-metric-tracking); }
+.text-section-title    { font: var(--type-section-title-weight) var(--type-section-title-size)/var(--type-section-title-line-height) var(--font-sans); letter-spacing: var(--type-section-title-tracking); }
+.text-section-subtitle { font: var(--type-section-subtitle-weight) var(--type-section-subtitle-size)/var(--type-section-subtitle-line-height) var(--font-sans); letter-spacing: var(--type-section-subtitle-tracking); }
+.text-brand            { font: var(--type-brand-weight) var(--type-brand-size)/var(--type-brand-line-height) var(--font-sans); letter-spacing: var(--type-brand-tracking); }
+.text-body-large       { font: var(--type-body-large-weight) var(--type-body-large-size)/var(--type-body-large-line-height) var(--font-sans); letter-spacing: var(--type-body-large-tracking); }
+.text-input            { font: var(--type-input-weight) var(--type-input-size)/var(--type-input-line-height) var(--font-sans); letter-spacing: var(--type-input-tracking); }
+.text-navigation       { font: var(--type-navigation-weight) var(--type-navigation-size)/var(--type-navigation-line-height) var(--font-sans); letter-spacing: var(--type-navigation-tracking); }
+.text-button           { font: var(--type-button-weight) var(--type-button-size)/var(--type-button-line-height) var(--font-sans); letter-spacing: var(--type-button-tracking); }
+.text-button-strong    { font: var(--type-button-strong-weight) var(--type-button-strong-size)/var(--type-button-strong-line-height) var(--font-sans); letter-spacing: var(--type-button-strong-tracking); }
+.text-label-medium     { font: var(--type-label-medium-weight) var(--type-label-medium-size)/var(--type-label-medium-line-height) var(--font-sans); letter-spacing: var(--type-label-medium-tracking); }
+.text-body             { font: var(--type-body-weight) var(--type-body-size)/var(--type-body-line-height) var(--font-sans); letter-spacing: var(--type-body-tracking); }
+.text-eyebrow          { font: var(--type-eyebrow-weight) var(--type-eyebrow-size)/var(--type-eyebrow-line-height) var(--font-sans); letter-spacing: var(--type-eyebrow-tracking); text-transform: uppercase; }
+.text-label            { font: var(--type-label-weight) var(--type-label-size)/var(--type-label-line-height) var(--font-sans); letter-spacing: var(--type-label-tracking); }
+.text-badge            { font: var(--type-badge-weight) var(--type-badge-size)/var(--type-badge-line-height) var(--font-sans); letter-spacing: var(--type-badge-tracking); }
+.text-body-small       { font: var(--type-body-small-weight) var(--type-body-small-size)/var(--type-body-small-line-height) var(--font-sans); letter-spacing: var(--type-body-small-tracking); }
+.text-chart-axis       { font: var(--type-chart-axis-weight) var(--type-chart-axis-size)/var(--type-chart-axis-line-height) var(--font-chart); letter-spacing: var(--type-chart-axis-tracking); }
+.text-caption-wide     { font: var(--type-caption-wide-weight) var(--type-caption-wide-size)/var(--type-caption-wide-line-height) var(--font-sans); letter-spacing: var(--type-caption-wide-tracking); }
+.text-example-badge    { font: var(--type-example-badge-weight) var(--type-example-badge-size)/var(--type-example-badge-line-height) var(--font-sans); letter-spacing: var(--type-example-badge-tracking); }
+.text-map-caption      { font: var(--type-map-caption-weight) var(--type-map-caption-size)/var(--type-map-caption-line-height) var(--font-sans); letter-spacing: var(--type-map-caption-tracking); }
+.text-map-attribution  { font: var(--type-map-attribution-weight) var(--type-map-attribution-size)/var(--type-map-attribution-line-height) var(--font-sans); letter-spacing: var(--type-map-attribution-tracking); }
+.text-map-control      { font: var(--type-map-control-weight) var(--type-map-control-size)/var(--type-map-control-line-height) var(--font-sans); letter-spacing: var(--type-map-control-tracking); }
+
+/* ==========================================================================
+   표면(Surface) — Figma Jellyfish/Surface/* 조합 그대로
+   ========================================================================== */
+.surface-page {
+  background: var(--gradient-page-ambient), var(--color-background-page);
+}
+.surface-navigation {
+  background: rgba(17, 17, 21, 0.9);
+}
+.surface-card {               /* 해수욕장 요약·예측 위험 지수·관측 정보 카드 */
+  background: var(--color-background-card);
+  border-radius: var(--radius-20);
+  padding: var(--spacing-24);
+  box-shadow: var(--shadow-card-outline);
+}
+
+/* 상단 오른쪽 유리 곡면 (510×350, 회전 164°) */
+.glass-top {
+  width: var(--size-glass-top-width);
+  height: var(--size-glass-top-height);
+  border-radius: 203px 76px 186px 110px;   /* 좌상 우상 우하 좌하 */
+  border: var(--border-width-1) solid var(--color-glass-top-border);
+  background: var(--gradient-glass-warm), var(--gradient-glass-cool), var(--color-glass-top-base);
+  box-shadow: var(--shadow-glass-top);
+  transform: rotate(164deg);
+}
+/* 하단 왼쪽 유리 곡면 (650×330, 회전 172°) */
+.glass-bottom {
+  width: var(--size-glass-bottom-width);
+  height: var(--size-glass-bottom-height);
+  border-radius: 130px 296px 93px 222px;
+  border: var(--border-width-1) solid var(--color-glass-bottom-border);
+  background: var(--gradient-glass-blue), var(--gradient-glass-violet), var(--color-glass-bottom-base);
+  box-shadow: var(--shadow-glass-bottom);
+  transform: rotate(172deg);
+}
+
+/* ==========================================================================
+   자주 쓰는 조각
+   ========================================================================== */
+/* 위험 등급 배지 ('낮음'만 전용 배경/글자색이 정의돼 있음) */
+.badge-risk-low {
+  background: var(--color-risk-low-background);
+  color: var(--color-risk-low-text);
+  font: var(--type-badge-weight) var(--type-badge-size)/var(--type-badge-line-height) var(--font-sans);
+}
+/* '예시 데이터' 배지 */
+.badge-example {
+  background: var(--color-example-background);
+  color: var(--color-example-text);
+  font: var(--type-example-badge-weight) var(--type-example-badge-size)/var(--type-example-badge-line-height) var(--font-sans);
+}
+/* 지도 확대/축소 버튼 */
+.map-control-button {
+  width: var(--size-map-control);
+  height: var(--size-map-control);
+  border-radius: var(--radius-12);
+  background: var(--color-map-control-background);
+  color: var(--color-map-foreground);
+  box-shadow: var(--shadow-map-control);
+  font: var(--type-map-control-weight) var(--type-map-control-size)/var(--type-map-control-line-height) var(--font-sans);
+}
+/* 선택한 해수욕장 마커 (32px 흰 테두리 원) */
+.map-marker {
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: var(--radius-16);
+  border: var(--border-width-4) solid var(--color-map-control-background);
+  box-shadow: var(--shadow-map-marker);
+}
+/* 지도 위 해수욕장 이름표 */
+.map-tooltip {
+  border-radius: var(--radius-8);
+  padding: var(--spacing-8) var(--spacing-12);
+  background: var(--color-map-control-background);
+  color: var(--color-map-tooltip-text);
+  box-shadow: var(--shadow-map-tooltip);
+}
+/* 로딩 스켈레톤 */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-loading-base) 0%, var(--color-loading-highlight) 50%, var(--color-loading-base) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-8);
+}
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}

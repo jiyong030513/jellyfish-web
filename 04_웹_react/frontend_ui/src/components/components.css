@@ -1,0 +1,350 @@
+/* ==========================================================================
+   Jellyfish 컴포넌트 스타일
+   치수는 Figma 컴포넌트 시트(1440px, 1:1)에서 잰 값. 색·글꼴은 tokens.css 변수만 사용.
+   ========================================================================== */
+
+/* ---------- 유틸 ---------- */
+.jc-c-primary   { color: var(--color-foreground-primary); }
+.jc-c-secondary { color: var(--color-foreground-secondary); }
+.jc-c-muted     { color: var(--color-text-muted); }
+.jc-c-hint      { color: var(--color-text-hint); }
+.jc-c-inverse   { color: var(--color-foreground-inverse); }
+.jc-c-tooltip   { color: var(--color-map-tooltip-text); }
+.jc-mt-4  { margin-top: 4px; }   .jc-mt-8  { margin-top: 8px; }   .jc-mt-12 { margin-top: 12px; }
+.jc-mt-16 { margin-top: 16px; }  .jc-mt-24 { margin-top: 24px; }  .jc-mt-28 { margin-top: 28px; }
+.jc-mt-32 { margin-top: 32px; }  .jc-mt-40 { margin-top: 40px; }
+.jc-stack-4 { display: flex; flex-direction: column; gap: 4px; }
+.jc-stack-8 { display: flex; flex-direction: column; gap: 8px; }
+.jc-divider { border: 0; border-top: 1px solid var(--color-border-default); margin-left: 0; margin-right: 0; margin-bottom: 0; width: 100%; }
+h1, h2, h3, p { margin: 0; }
+button { font-family: var(--font-sans); }
+
+/* ---------- 브랜드/로고 ---------- */
+.jc-logo { display: inline-flex; align-items: center; justify-content: center; color: var(--color-foreground-primary); flex: none; }
+.jc-logo--tile {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--color-background-card);
+  box-shadow: inset 0 0 0 1px var(--color-border-subtle);
+}
+.jc-logo--plain { width: 32px; height: 32px; }
+.jc-brand { display: inline-flex; align-items: center; gap: 12px; color: var(--color-foreground-primary); }
+.jc-brand--footer { gap: 16px; }
+.jc-brand__text { display: flex; flex-direction: column; gap: 2px; }
+
+/* ---------- 버튼/동작 ---------- */
+.jc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 0; cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: filter .15s ease, background-color .15s ease, opacity .15s ease;
+}
+.jc-btn:focus-visible, .jc-toggle__item:focus-visible, .jc-tabs__item:focus-visible, .jc-zoom__btn:focus-visible {
+  outline: 2px solid var(--color-foreground-primary); outline-offset: 2px;
+}
+.jc-btn:disabled { cursor: default; }
+/* 이용 안내: 104×44 외곽선 알약 */
+.jc-btn--outline {
+  height: 44px; padding: 0 26px; border-radius: 22px;
+  background: transparent; color: var(--color-foreground-primary);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  font: var(--type-button-weight) var(--type-button-size)/var(--type-button-line-height) var(--font-sans);
+}
+.jc-btn--outline:hover { background: rgba(245, 245, 247, 0.06); }
+/* 검색: 84×44 */
+.jc-btn--primary {
+  height: 44px; min-width: 84px; padding: 0 20px; border-radius: 12px;
+  background: var(--color-action-primary-background); color: var(--color-foreground-inverse);
+  font: var(--type-button-strong-weight) var(--type-button-strong-size)/var(--type-button-strong-line-height) var(--font-sans);
+}
+/* 업데이트: 200×48 */
+.jc-btn--update {
+  height: 48px; min-width: 200px; padding: 0 24px; border-radius: 12px;
+  background: var(--color-action-primary-background); color: var(--color-foreground-inverse);
+  font: var(--type-button-weight) var(--type-button-size)/var(--type-button-line-height) var(--font-sans);
+}
+.jc-btn--primary:hover, .jc-btn--update:hover { filter: brightness(0.94); }
+.jc-btn--primary:disabled, .jc-btn--update:disabled { opacity: .35; }
+.jc-btn--block { width: 100%; height: 56px; }
+/* 전국 보기: 95×40 */
+.jc-btn--chip {
+  height: 40px; padding: 0 12px; border-radius: 10px;
+  background: var(--color-background-raised); color: var(--color-foreground-primary);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  font: var(--type-label-weight) var(--type-label-size)/var(--type-label-line-height) var(--font-sans);
+}
+.jc-btn--chip:disabled { background: transparent; color: var(--color-text-disabled); box-shadow: inset 0 0 0 1px var(--color-border-subtle); }
+/* 아이콘/새로고침 타일 */
+.jc-icon-tile {
+  width: 34px; height: 34px; border: 0; border-radius: 8px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--color-action-primary-background); color: var(--color-foreground-inverse);
+}
+
+/* ---------- 탐색 ---------- */
+.jc-nav__item { color: var(--color-foreground-secondary); text-decoration: none; padding: 0 18px; height: 48px; display: inline-flex; align-items: center; border-radius: 24px; }
+.jc-nav__item:hover, .jc-nav__item[aria-current="page"] { color: var(--color-foreground-primary); }
+.jc-footer__link { color: var(--color-foreground-secondary); text-decoration: none; }
+.jc-footer__link:hover { color: var(--color-foreground-primary); }
+
+/* ---------- 입력/날짜선택 (264×48) ---------- */
+.jc-date {
+  position: relative; display: inline-flex; align-items: center; justify-content: flex-start;
+  width: 264px; height: 56px; box-sizing: border-box; padding: 0 48px 0 17px; border-radius: 12px;
+  background: var(--color-background-raised); box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  color: var(--color-foreground-primary); cursor: pointer;
+}
+.jc-date svg { position: absolute; right: 16px; }
+.jc-date input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+
+/* ---------- 입력/해수욕장검색 (672×56) ---------- */
+.jc-search {
+  display: flex; align-items: center; gap: 12px; box-sizing: border-box;
+  width: 672px; max-width: 100%; height: 56px; padding: 0 6px 0 16px; border-radius: 12px;
+  background: var(--color-background-raised); box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+.jc-search__icon { color: var(--color-foreground-secondary); flex: none; }
+.jc-search__input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: var(--color-foreground-primary); }
+.jc-search__input::placeholder { color: var(--color-text-placeholder); }
+
+/* ---------- 선택/지도표시기준 (200×48 ×2) ---------- */
+.jc-toggle { display: flex; gap: 8px; }
+.jc-toggle__item {
+  width: 140px; height: 44px; border: 0; border-radius: 12px; cursor: pointer;
+  background: var(--color-background-raised); color: var(--color-foreground-secondary);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+.jc-toggle__item.is-selected { background: var(--color-action-primary-background); color: var(--color-foreground-inverse); box-shadow: none; }
+.jc-toggle__item:disabled { cursor: default; opacity: .55; }
+
+/* ---------- 선택/예측기간 (112×48 ×3) ---------- */
+.jc-tabs { display: flex; gap: 12px; }
+.jc-tabs__item {
+  width: 88px; height: 44px; border: 0; border-radius: 12px; cursor: pointer;
+  background: var(--color-background-card); color: var(--color-text-disabled);
+  box-shadow: inset 0 0 0 1px var(--color-border-default);
+}
+.jc-tabs__item:hover:not(:disabled):not(.is-selected) { color: var(--color-foreground-secondary); }
+.jc-tabs__item.is-selected { background: var(--color-action-primary-background); color: var(--color-foreground-inverse); }
+.jc-tabs__item:disabled { cursor: default; opacity: .55; }
+
+/* ---------- 범례 ---------- */
+.jc-legend { display: flex; flex-wrap: wrap; align-items: center; column-gap: 24px; row-gap: 8px; color: var(--color-foreground-primary); }
+.jc-legend--chart { column-gap: 20px; }
+.jc-legend__title { margin-right: 4px; }
+.jc-legend__item { display: inline-flex; align-items: center; gap: 8px; }
+.jc-legend__item > .text-label + .text-body-small { margin-left: 0; }
+.jc-legend--grid { display: grid; grid-template-columns: 248px 1fr; row-gap: 12px; column-gap: 0; }
+.jc-legend--grid .jc-legend__item:last-child { grid-column: 1 / -1; }
+.jc-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+/* ---------- 정보 ---------- */
+.jc-species-row {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 44px; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-foreground-primary);
+}
+.jc-species-row--loading { min-height: 48px; border-bottom: 0; }
+.jc-info-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 20px; color: var(--color-foreground-primary); }
+.jc-query-basis { display: inline-flex; align-items: center; gap: 12px; color: var(--color-foreground-primary); }
+.jc-guide {
+  box-sizing: border-box; width: 100%; padding: 16px; border-radius: 12px;
+  background: var(--color-background-raised); color: var(--color-foreground-secondary);
+}
+.jc-guide--tall { min-height: 72px; display: flex; align-items: center; }
+
+/* ---------- 정보/기간별예측 ---------- */
+.jc-period { display: grid; grid-template-columns: repeat(3, 1fr); }
+.jc-period__col { display: flex; flex-direction: column; align-items: flex-start; padding-left: 16px; border-left: 1px solid var(--color-border-default); color: var(--color-foreground-primary); }
+.jc-period__col:first-child { padding-left: 0; border-left: 0; }
+
+/* ---------- 배지 ---------- */
+.jc-badge { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 14px; color: var(--color-foreground-inverse); white-space: nowrap; }
+.jc-badge--veryHigh { background: var(--color-risk-very-high); }
+.jc-badge--high     { background: var(--color-risk-high); }
+.jc-badge--medium   { background: var(--color-risk-medium); }
+.jc-badge--low      { background: var(--color-risk-low-background); color: var(--color-risk-low-text); }
+.jc-badge--noData   { background: var(--color-risk-no-data); }
+.jc-badge-example { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; background: var(--color-example-background); color: var(--color-example-text); }
+
+/* ---------- 지도 조각 ---------- */
+.jc-marker { display: inline-block; box-sizing: border-box; width: 32px; height: 32px; border-radius: 16px; background: var(--color-map-control-background); border: 4px solid var(--color-map-control-background); box-shadow: var(--shadow-map-marker); }
+.jc-map-label { display: inline-flex; align-items: center; height: 36px; box-sizing: border-box; padding: 8px 12px; border-radius: 8px; background: var(--color-map-control-background); color: var(--color-map-tooltip-text); box-shadow: var(--shadow-map-tooltip); white-space: nowrap; }
+.jc-zoom { display: flex; flex-direction: column; gap: 8px; }
+.jc-zoom__btn {
+  width: 44px; height: 44px; border: 0; border-radius: 12px; cursor: pointer; padding: 0;
+  background: var(--color-map-control-background); color: var(--color-map-foreground); box-shadow: var(--shadow-map-control);
+}
+.jc-zoom__btn:disabled { cursor: default; opacity: .35; box-shadow: none; }
+
+/* ---------- 로딩/기본요소 ---------- */
+.jc-skeleton { display: block; flex: none; background: var(--color-loading-base); animation: jc-pulse 1.6s ease-in-out infinite; }
+.jc-skeleton--highlight { background: var(--color-loading-highlight); }
+@keyframes jc-pulse { 50% { opacity: .55; } }
+.jc-loading { display: inline-flex; align-items: center; gap: 8px; }
+.jc-loading__dots { display: inline-flex; gap: 4px; }
+.jc-loading__dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--color-foreground-secondary); animation: jc-dots 1.2s infinite ease-in-out; }
+.jc-loading__dots i:nth-child(1) { opacity: .3; animation-delay: 0s; }
+.jc-loading__dots i:nth-child(2) { opacity: .6; animation-delay: .2s; }
+.jc-loading__dots i:nth-child(3) { animation-delay: .4s; }
+@keyframes jc-dots { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .jc-skeleton, .jc-loading__dots i { animation: none; } }
+
+/* ==========================================================================
+   영역
+   ========================================================================== */
+.jc-header {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  padding: 24px 0 23px; border-bottom: 1px solid var(--color-border-subtle);
+}
+.jc-header > :last-child { justify-self: end; }
+.jc-nav { display: inline-flex; align-items: center; height: 48px; padding: 0 2px; border-radius: 24px; }
+.jc-intro { padding-top: 23px; display: flex; flex-direction: column; color: var(--color-foreground-primary); }
+.jc-intro .text-display { margin-top: 14px; }
+.jc-intro .text-body-large { margin-top: 8px; }
+
+.jc-field { display: flex; flex-direction: column; gap: 4px; }
+.jc-field__label { display: flex; justify-content: space-between; align-items: center; }
+
+/* ---------- 카드 공통 (배경 #111115, 모서리 20, 여백 24, 외곽선 그림자) ---------- */
+.jc-card {
+  box-sizing: border-box; display: flex; flex-direction: column; padding: 24px; border-radius: 20px;
+  background: var(--color-background-card); box-shadow: var(--shadow-card-outline); color: var(--color-foreground-primary);
+}
+.jc-card__head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.jc-card__head--start { align-items: flex-start; }
+.jc-card__foot { margin-top: auto; padding-top: 24px; }
+.jc-card__foot--line { padding-top: 16px; border-top: 1px solid var(--color-border-default); margin-top: auto; }
+
+/* 카드/해수욕장요약 336×760 */
+.jc-summary { min-height: 760px; }
+.jc-summary__metric { display: flex; align-items: center; justify-content: space-between; }
+.jc-summary__species { margin-top: 12px; }
+.jc-summary__species--loading { margin-top: 4px; }
+.jc-summary__controls { margin-top: auto; padding-top: 16px; display: flex; flex-direction: column; }
+.jc-summary__controls .jc-toggle, .jc-summary__controls .jc-tabs { margin-top: 8px; }
+
+/* 카드/해수욕장지도 528×760 (지도 480×648) */
+.jc-map-card { min-height: 760px; }
+.jc-map {
+  position: relative; margin-top: 20px; height: 512px; border-radius: 16px; overflow: hidden;
+  background: var(--color-map-background);
+}
+.jc-map--loading { height: 648px; background: var(--color-background-raised); display: flex; align-items: center; justify-content: center; }
+.jc-map__zoom { position: absolute; top: 16px; right: 16px; z-index: 2; }
+.jc-map__attribution { position: absolute; right: 0; bottom: 0; padding: 2px 6px; background: var(--color-map-attribution-background); color: var(--color-map-foreground); z-index: 2; }
+.jc-map-card__legend { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.jc-map__attribution a { color: var(--color-map-link); }
+
+/* 카드/예측위험지수 432×328 (로딩 292) */
+.jc-forecast { min-height: 328px; }
+.jc-forecast.is-loading { min-height: 292px; }
+.jc-forecast__foot { margin-top: 20px; }
+.jc-forecast__foot--line { padding-top: 16px; border-top: 1px solid var(--color-border-default); }
+.jc-forecast.is-loading .jc-forecast__foot { margin-top: 40px; }
+
+/* 카드/관측산출정보 432×328 (로딩 364) — 오른쪽 열 남는 높이를 채움 */
+.jc-obs { flex: 1; padding-bottom: 16px; }
+.jc-obs__group { margin-top: 16px; }
+.jc-obs__rows { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.jc-obs__rows--wide { gap: 12px; }
+.jc-obs__divider { margin-top: auto; }
+.jc-obs__group--station { margin-top: 24px; }
+.jc-obs.is-loading .jc-obs__divider { margin-top: 12px; }
+.jc-obs.is-loading .jc-obs__group--station { margin-top: 46px; }
+.jc-obs.is-loading .jc-obs__rows--wide { margin-top: 14px; }
+
+/* 안내/예측산출기준 1344×144 (배경 raised) */
+.jc-notice {
+  box-sizing: border-box; min-height: 144px; padding: 32px; border-radius: 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  background: var(--color-background-raised); color: var(--color-foreground-primary);
+}
+.jc-notice--loading { display: block; }
+
+/* 차트/평년출현율 1344×360 */
+.jc-chart-card { min-height: 360px; }
+.jc-chart-card__title { display: inline-flex; align-items: center; gap: 12px; }
+.jc-chart { display: block; width: 100%; height: auto; margin-top: 24px; overflow: visible; }
+.jc-chart__axis { font: var(--type-chart-axis-weight) var(--type-chart-axis-size) var(--font-chart); fill: var(--color-chart-axis); }
+.jc-chart__axis--selected { fill: var(--color-chart-selected-label); }
+.jc-chart-skeleton { position: relative; margin-top: 24px; height: 236px; border-radius: 12px; background: var(--color-background-raised); display: flex; align-items: center; justify-content: center; }
+.jc-chart-skeleton__grid { position: absolute; left: 40px; right: 40px; height: 1px; background: var(--color-chart-grid); }
+.jc-chart-skeleton__axis { position: absolute; left: 40px; right: 40px; bottom: 16px; display: flex; justify-content: space-between; }
+
+/* 영역/서비스푸터 */
+.jc-footer { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; border-top: 1px solid var(--color-border-default); }
+.jc-footer__links { display: flex; gap: 32px; }
+
+/* 해파리 AI 가이드 버튼 */
+.jc-chatbot { position: fixed; right: 40px; bottom: 32px; z-index: 50; display: flex; align-items: center; gap: 16px; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; }
+.jc-chatbot__bubble { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; border-radius: 16px; background: var(--color-map-control-background); box-shadow: var(--shadow-map-tooltip); }
+.jc-chatbot__bubble::after { content: ""; position: absolute; right: -6px; top: 50%; width: 12px; height: 12px; background: inherit; transform: translateY(-50%) rotate(45deg); border-radius: 2px; }
+.jc-chatbot__avatar { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.jc-chatbot__avatar img { width: 88px; height: 88px; object-fit: contain; }
+.jc-chatbot__fallback { width: 88px; height: 88px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 35% 30%, #f3e9ff 0%, #b9d4ff 45%, #8fd9e6 75%, rgba(143, 217, 230, 0) 76%); color: #5a4f8f; }
+.jc-chatbot__label { padding: 2px 12px; border-radius: 12px; background: var(--color-background-card); box-shadow: inset 0 0 0 1px var(--color-border-default); color: var(--color-foreground-primary); }
+
+/* 배경 유리 곡면 (1440 프레임 기준 위치) */
+.jc-glass-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.jc-glass-layer__top { position: absolute; top: -131px; right: -55px; }
+.jc-glass-layer__bottom { position: absolute; bottom: -135px; left: -110px; }
+.jc-summary[aria-busy] .jc-guide { min-height: 60px; display: flex; align-items: center; }
+.jc-period--loading .jc-period__col { border-left-color: transparent; }
+.jc-summary[aria-busy] .jc-summary__controls .jc-mt-8 { margin-top: 0; }
+.jc-obs { min-height: 328px; }
+.jc-obs.is-loading { min-height: 364px; }
+
+/* ==========================================================================
+   Leaflet 지도 (BeachMap)
+   ========================================================================== */
+.jc-leaflet { position: absolute; inset: 0; z-index: 0; background: var(--color-map-background); font-family: var(--font-sans); }
+.jc-leaflet .leaflet-container, .jc-leaflet.leaflet-container { background: var(--color-map-background); font-family: var(--font-sans); }
+.jc-map__zoom, .jc-map__attribution { z-index: 500; }
+.jc-leaflet-selected { position: relative; }
+.jc-leaflet-selected .jc-marker { position: absolute; left: -16px; top: -16px; }
+.jc-leaflet-selected .jc-map-label { position: absolute; left: 0; bottom: 28px; transform: translateX(-50%); }
+.leaflet-tooltip.jc-leaflet-tip {
+  padding: 6px 10px; border: 0; border-radius: 8px; background: var(--color-map-control-background);
+  color: var(--color-map-tooltip-text); box-shadow: var(--shadow-map-tooltip); font: 400 12px/18px var(--font-sans); white-space: nowrap;
+}
+.leaflet-tooltip.jc-leaflet-tip::before { display: none; }
+
+/* ==========================================================================
+   해파리 AI 가이드 대화창 (ChatPanel)
+   ========================================================================== */
+.jc-chat {
+  position: fixed; right: 40px; bottom: 32px; z-index: 60; width: 400px; height: min(640px, calc(100vh - 64px));
+  display: flex; flex-direction: column; box-sizing: border-box; border-radius: 20px; overflow: hidden;
+  background: var(--color-background-card); color: var(--color-foreground-primary);
+  box-shadow: var(--shadow-card-outline), 0 16px 48px rgba(0, 0, 0, .55);
+}
+.jc-chat__head { display: flex; align-items: center; gap: 12px; padding: 16px 16px 16px 20px; border-bottom: 1px solid var(--color-border-subtle); }
+.jc-chat__avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
+  background: radial-gradient(circle at 35% 30%, #f3e9ff 0%, #b9d4ff 45%, #8fd9e6 100%); color: #5a4f8f; }
+.jc-chat__title { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.jc-chat__close { width: 36px; height: 36px; border: 0; border-radius: 10px; cursor: pointer; background: var(--color-background-raised);
+  color: var(--color-foreground-secondary); font: 400 22px/1 var(--font-sans); }
+.jc-chat__close:hover { color: var(--color-foreground-primary); }
+.jc-chat__list { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.jc-chat__msg { display: flex; flex-direction: column; gap: 6px; max-width: 86%; }
+.jc-chat__msg--user { align-self: flex-end; align-items: flex-end; }
+.jc-chat__msg--model { align-self: flex-start; }
+.jc-chat__bubble { margin: 0; padding: 12px 14px; border-radius: 16px; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+.jc-chat__msg--model .jc-chat__bubble { background: var(--color-background-raised); border-top-left-radius: 4px; }
+.jc-chat__msg--user .jc-chat__bubble { background: var(--color-action-primary-background); color: var(--color-foreground-inverse); border-top-right-radius: 4px; }
+.jc-chat__bubble.is-error { box-shadow: inset 0 0 0 1px var(--color-border-strong); color: var(--color-foreground-secondary); }
+.jc-chat__emergency { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 12px;
+  background: var(--color-risk-very-high, #EF4444); color: #fff; text-decoration: none; }
+.jc-chat__sources { color: var(--color-text-muted); display: flex; flex-wrap: wrap; gap: 4px 8px; padding-left: 4px; }
+.jc-chat__sources a { color: var(--color-foreground-secondary); text-decoration: underline; text-underline-offset: 2px; }
+.jc-chat__suggest { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.jc-chat__chip { padding: 8px 12px; border: 0; border-radius: 999px; cursor: pointer; background: transparent;
+  color: var(--color-foreground-primary); box-shadow: inset 0 0 0 1px var(--color-border-strong); }
+.jc-chat__chip:hover { background: var(--color-background-raised); }
+.jc-chat__form { display: flex; gap: 8px; padding: 12px 16px 4px; border-top: 1px solid var(--color-border-subtle); }
+.jc-chat__input { flex: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0 14px; border: 0; border-radius: 12px; outline: none;
+  background: var(--color-background-raised); color: var(--color-foreground-primary); box-shadow: inset 0 0 0 1px var(--color-border-strong); }
+.jc-chat__input::placeholder { color: var(--color-text-placeholder); }
+.jc-chat__input:focus { box-shadow: inset 0 0 0 1px var(--color-foreground-secondary); }
+.jc-chat__send { height: 48px; padding: 0 16px; }
+.jc-chat__send:disabled { opacity: .35; cursor: default; }
+.jc-chat__note { margin: 0; padding: 4px 16px 12px; }

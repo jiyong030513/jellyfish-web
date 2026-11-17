@@ -186,6 +186,13 @@ from jellycast.chat import router as chat_router  # noqa: E402
 _jc_forecast.연결(svc, 예측표)
 app.include_router(chat_router, prefix="/api")
 
+# ---------------------------------------------------------------- 피그마 시안 화면(frontend_ui)용: /api/ui/beaches, /api/ui/chat
+import ui_api  # noqa: E402
+
+ui_api.연결(svc, 예측표)
+app.include_router(ui_api.router, prefix="/api/ui")
+app.include_router(chat_router, prefix="/api/ui")
+
 
 @app.api_route("/api/health", methods=["GET", "HEAD"])
 def health():
