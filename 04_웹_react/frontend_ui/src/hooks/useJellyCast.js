@@ -3,7 +3,7 @@
    - 해수욕장 선택(지도 클릭·검색) → 상세만 다시 불러옴
    - 지도색 기준 · 예측 기간 → 이미 받은 값으로 지도 색만 바뀜 (서버 요청 없음) */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { fetchBeaches, fetchBeachDetail } from '../api/client.js';
+import { fetchBeaches, fetchBeachDetail, fetchTop } from '../api/client.js';
 import { today } from '../api/week.js';
 
 const norm = (s) => s.replace(/\s+/g, '').replace(/해수욕장$/, '').toLowerCase();
@@ -51,6 +51,15 @@ export function useJellyCast({ initialDate = today(), initialBeachId = null } = 
       .finally(() => id === reqId.current && setDetailLoading(false));
   }, [selectedId, date, reloadKey]);
 
+  // 위험 상위 10곳: 날짜 · 예측 기간 · 업데이트
+  const [top, setTop] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    setTop(null);
+    fetchTop({ date, weeks }).then((r) => alive && setTop(r)).catch(() => alive && setTop({ items: [] }));
+    return () => { alive = false; };
+  }, [date, weeks, reloadKey]);
+
   const refresh = useCallback(() => setReloadKey((k) => k + 1), []);
 
   const select = useCallback((id) => {
@@ -86,7 +95,7 @@ export function useJellyCast({ initialDate = today(), initialBeachId = null } = 
     // 조회 조건
     date, setDate, basis, setBasis, weeks, setWeeks, query, setQuery,
     // 데이터
-    beaches, selected, selectedId, detail, weekLabel: list?.weekLabel, percentOf,
+    beaches, selected, selectedId, detail, top, weekLabel: list?.weekLabel, percentOf,
     // 상태
     listLoading, detailLoading, loading: listLoading || detailLoading || !detail, error, guide,
     // 동작

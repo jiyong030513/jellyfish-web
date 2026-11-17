@@ -8,7 +8,10 @@ import { BrandLogo, LoadingIndicator } from './basics.jsx';
 const SUGGESTIONS = ['해파리에 쏘이면 어떻게 해?', '여기 지금 가도 괜찮아?', '해파리 예방 수칙 알려줘'];
 const WELCOME = '안녕하세요! 해파리에 쏘였을 때 대처법, 예방 수칙, 해수욕장 위험도를 물어보세요.';
 
-export function ChatPanel({ open, onClose, beach, horizonWeeks, date }) {
+// 답에 쓰인 예보 해수욕장 (중복 제거) → 누르면 지도 이동
+const uniquePlaces = (rows = []) => [...new Map(rows.filter((r) => r.beach_id).map((r) => [r.beach_id, { id: r.beach_id, name: r.beach_name }])).values()];
+
+export function ChatPanel({ open, onClose, beach, horizonWeeks, date, onPick }) {
   const [messages, setMessages] = useState([{ role: 'model', text: WELCOME }]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
@@ -36,7 +39,7 @@ export function ChatPanel({ open, onClose, beach, horizonWeeks, date }) {
     setSending(true);
     try {
       const res = await sendChat({ message, beachId: beach?.id, horizonWeeks, date, history });
-      setMessages((m) => [...m, { role: 'model', text: res.answer, emergency: res.emergency, sources: res.sources ?? [] }]);
+      setMessages((m) => [...m, { role: 'model', text: res.answer, emergency: res.emergency, sources: res.sources ?? [], places: uniquePlaces(res.forecast) }]);
     } catch (err) {
       setMessages((m) => [...m, { role: 'model', error: true, text: '답변을 받지 못했어요. 잠시 후 다시 시도해 주세요. 응급 상황이면 바로 119에 신고하세요.' }]);
       console.error('[jellycast] chat', err);
@@ -67,6 +70,14 @@ export function ChatPanel({ open, onClose, beach, horizonWeeks, date }) {
               </a>
             )}
             <p className={`jc-chat__bubble text-body${m.error ? ' is-error' : ''}`}>{m.text}</p>
+            {m.places?.length > 0 && onPick && (
+              <div className="jc-chat__places">
+                {m.places.map((p) => (
+                  <button key={p.id} type="button" className="jc-chat__chip text-body-small" onClick={() => onPick(p.id)}
+                    aria-label={`${p.name} 지도에서 보기`}>📍 {p.name}</button>
+                ))}
+              </div>
+            )}
             {m.sources?.length > 0 && (
               <div className="jc-chat__sources text-body-small">
                 출처{' '}

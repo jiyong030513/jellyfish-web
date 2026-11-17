@@ -104,3 +104,20 @@ def beach_detail(beach_id: str, date: str = ""):
                              else "같은 시기 주간보고의 대량출현 비율 × 해수욕장 가중치")},
         "season": {"data": data, "selected_index": idx[0] if idx else None, "is_example": False},
     }
+
+
+@router.get("/top")
+def top(date: str = "", k: int = 1):
+    """k주 뒤 위험 지수 상위 10곳 (기존 화면 /api/top과 같은 계산)"""
+    if k not in (1, 2, 4):
+        raise HTTPException(400, "k는 1, 2, 4 중 하나예요")
+    from 서비스로직 import 대상주
+    날짜 = _날짜(date)
+    s = _p["svc"]()
+    t = s.상위(_p["예측표"](날짜), k)
+    대상 = 대상주(날짜, k)
+    return {"title": f"{k}주 뒤 위험 지수 상위 10곳", "week": f"{대상['이름']} ({대상['범위']})",
+            "items": [] if t.empty else [
+                {"id": r.해수욕장ID, "name": r.해수욕장명, "region": f"{r.시군명} · {r.권역명}권역",
+                 "percent": _pct(r.예측위험지수), "label": r.표시,
+                 "method": "모델 예측" if r.방식 == "모델" else "평년 기준 전망"} for r in t.itertuples()]}

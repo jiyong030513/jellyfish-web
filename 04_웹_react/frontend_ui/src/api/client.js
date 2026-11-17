@@ -71,6 +71,15 @@ export async function fetchBeachDetail(id, { date }) {
   };
 }
 
+/* ───── 위험 지수 상위 10곳 ─────
+   GET /top?date=2026-11-11&k=1 */
+export async function fetchTop({ date, weeks }) {
+  return withFallback(
+    () => request(`/top?date=${encodeURIComponent(date)}&k=${weeks}`),
+    () => ({ title: `${weeks}주 뒤 위험 지수 상위 10곳`, week: '', items: [] }),
+  );
+}
+
 /* ───── 챗봇 ─────
    POST /chat  (이지용님 jellycast-chat 서버와 같은 형식)
    history: [{ role: 'user' | 'model', text }] 최근 10개 */

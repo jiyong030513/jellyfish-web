@@ -1,0 +1,69 @@
+/* 위험 상위 10곳 카드 + 챗봇 📍 버튼 + 화면 폭 대응
+   넓은 화면(1392px 이상)은 피그마 시안 그대로, 그보다 좁으면 2칸 → 1칸(640px 이하). */
+
+/* ---------- 위험 상위 10곳 (시안 카드 스타일) ---------- */
+.jc-top__list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; grid-auto-flow: column; grid-template-rows: repeat(5, auto); }
+.jc-top__list > li { min-width: 0; }
+.jc-top__row {
+  width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 8px;
+  border: 0; border-bottom: 1px solid var(--color-border-subtle); border-radius: 0; background: transparent;
+  color: var(--color-foreground-primary); text-align: left; cursor: pointer; font: inherit;
+}
+li > .jc-top__row:hover { background: var(--color-background-raised); border-radius: 12px; }
+.jc-top__row.is-selected { background: var(--color-background-raised); border-radius: 12px; box-shadow: inset 0 0 0 1px var(--color-border-strong); }
+div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-between; }
+.jc-top__rank { width: 20px; flex: none; text-align: center; }
+.jc-top__name { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.jc-top__name > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- 챗봇 답 아래 📍 해수욕장 버튼 ---------- */
+.jc-chat__places { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ---------- 2칸 (모니터 반쪽 · 노트북 작은 창 · 태블릿) ---------- */
+@media (max-width: 1391px) {
+  .demo-container { width: auto; max-width: 1344px; padding: 0 24px 40px; }
+  .demo-search-row { flex-wrap: wrap; gap: 16px; }
+  .demo-search-row__inputs { flex: 1 1 100%; flex-wrap: wrap; gap: 16px; }
+  .jc-search { flex: 1 1 360px; width: auto; }
+  .demo-search-row > .jc-query-basis { margin-bottom: 0; }
+
+  .demo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .demo-grid > .jc-map-card { grid-column: 1 / -1; order: -1; }   /* 지도를 맨 위에 크게 */
+  .jc-summary, .jc-map-card { min-height: 0; }
+  .jc-map { height: 480px; }
+  .jc-map--loading { height: 480px; }
+
+  .jc-chart-card { overflow-x: auto; }
+  .jc-chart { min-width: 760px; }   /* 글자가 너무 작아지지 않게, 좁으면 옆으로 밀어서 봄 */
+}
+
+/* ---------- 1칸 (휴대폰) ---------- */
+@media (max-width: 640px) {
+  .demo-container { padding: 0 16px 112px; }
+  .jc-header { grid-template-columns: 1fr auto; }
+  .jc-nav { display: none; }
+  .jc-intro .text-display { font-size: 28px; line-height: 36px; }
+
+  .demo-search-row__inputs { flex-direction: column; align-items: stretch; }
+  .jc-search, .jc-date { width: 100%; flex: none; }
+  .jc-search { flex-wrap: nowrap; }
+
+  .demo-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+  .demo-col { gap: 16px; }
+  .jc-card { padding: 20px; border-radius: 16px; }
+  .jc-map { height: 360px; margin-top: 16px; }
+  .jc-map--loading { height: 360px; }
+
+  .jc-top__list { grid-template-columns: 1fr; grid-auto-flow: row; grid-template-rows: none; }
+  .jc-notice { flex-direction: column; align-items: flex-start; padding: 20px; min-height: 0; }
+  .jc-footer { flex-direction: column; align-items: flex-start; gap: 16px; padding: 40px 0; }
+  .jc-footer__links { flex-wrap: wrap; gap: 16px; }
+
+  /* 챗봇: 열기 버튼은 작게, 대화창은 화면 전체 */
+  .jc-chatbot { right: 16px; bottom: 16px; }
+  .jc-chatbot__bubble { display: none; }
+  .jc-chatbot__avatar img, .jc-chatbot__fallback { width: 64px; height: 64px; }
+  .jc-chat { inset: 0; right: 0; bottom: 0; width: auto; height: 100dvh; border-radius: 0; }
+  .jc-chat__msg { max-width: 92%; }
+  .jc-chat__chip, .jc-chat__send { min-height: 44px; }
+}

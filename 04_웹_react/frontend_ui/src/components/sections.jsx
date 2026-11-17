@@ -307,6 +307,46 @@ export function LineChart({ data, selectedIndex, width = 1296, height = 220, ser
   );
 }
 
+/* ───────────── 카드/위험 상위 10곳 ─────────────
+   top: { title, week, items:[{id,name,region,percent,label,method}] } — 줄을 누르면 그 해수욕장 선택 */
+export function TopRiskCard({ top, selectedId, onSelect }) {
+  const loading = !top;
+  return (
+    <article className="jc-card jc-top" aria-busy={loading || undefined}>
+      <CardHead
+        title={top?.title ?? '위험 지수 상위 10곳'}
+        loading={loading}
+        aside={<span className="text-body-small jc-c-muted">{top?.week}</span>}
+      />
+      {loading ? (
+        <ol className="jc-top__list">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <li key={i} className="jc-top__row"><Skeleton width={160} height={12} /><Skeleton width={56} height={12} /></li>
+          ))}
+        </ol>
+      ) : top.items.length === 0 ? (
+        <p className="text-body jc-c-secondary jc-mt-16">이 날짜에는 위험 지수 자료가 없어요.</p>
+      ) : (
+        <ol className="jc-top__list">
+          {top.items.map((it, i) => (
+            <li key={it.id}>
+              <button type="button" className={cx('jc-top__row', it.id === selectedId && 'is-selected')} onClick={() => onSelect?.(it.id)}>
+                <span className="jc-top__rank text-label jc-c-secondary">{i + 1}</span>
+                <span className="jc-top__name">
+                  <span className="text-button">{it.name}</span>
+                  <span className="text-body-small jc-c-muted">{it.region} · {it.method}</span>
+                </span>
+                <span className="text-label">{it.label}</span>
+                <RiskBadge percent={it.percent} />
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
+    </article>
+  );
+}
+
 /* ───────────── 영역/서비스푸터 ───────────── */
 export function ServiceFooter({ links = ['데이터 출처', '모델 안내', '이용 안내'] }) {
   return (

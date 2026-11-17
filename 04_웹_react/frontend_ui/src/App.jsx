@@ -3,7 +3,7 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import {
   ServiceHeader, ServiceIntro, BeachSearch, DateField, QueryBasis, UpdateBar,
-  BeachSummaryCard, BeachMapCard, ForecastCard, ObservationCard, ForecastNotice, SeasonChartCard,
+  BeachSummaryCard, BeachMapCard, ForecastCard, ObservationCard, ForecastNotice, SeasonChartCard, TopRiskCard,
   ServiceFooter, ChatbotLauncher, ChatPanel, GlassBackdrop, BeachMap,
 } from './components';
 import { useJellyCast } from './hooks/useJellyCast.js';
@@ -74,6 +74,7 @@ function JellyCastPage({ forceLoading = false }) {
           </div>
         </div>
 
+        <div className="jc-mt-24"><TopRiskCard top={j.top} selectedId={j.selectedId} onSelect={j.select} /></div>
         <div className="jc-mt-24"><ForecastNotice {...d?.notice} loading={cardsLoading} /></div>
         <div className="jc-mt-24">
           <SeasonChartCard
@@ -88,7 +89,8 @@ function JellyCastPage({ forceLoading = false }) {
       </div>
 
       {chatOpen
-        ? <ChatPanel open onClose={() => setChatOpen(false)} beach={j.selected} horizonWeeks={j.weeks} date={j.date} />
+        ? <ChatPanel open onClose={() => setChatOpen(false)} beach={j.selected} horizonWeeks={j.weeks} date={j.date}
+            onPick={(id) => { j.select(id); if (window.innerWidth < 720) setChatOpen(false); }} />
         : <ChatbotLauncher onOpen={() => setChatOpen(true)} />}
     </div>
   );
