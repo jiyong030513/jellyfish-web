@@ -365,10 +365,10 @@ export function ChatbotLauncher({ onOpen, imageSrc }) {
   // 말풍선은 페이지 맨 위에서만 보이고, 내려가면 숨김 (오른쪽 카드 숫자를 가리지 않게). 마우스를 올리면 다시 보임
   const [atTop, setAtTop] = useState(true);
   useEffect(() => {
-    const onScroll = () => setAtTop(window.scrollY < 120);
-    onScroll();
+    const onScroll = () => setAtTop(false);
+    const timer = setTimeout(() => setAtTop(false), 4000); // 처음 4초만 안내 후 숨김
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => { clearTimeout(timer); window.removeEventListener('scroll', onScroll); };
   }, []);
   return (
     <button type="button" className={cx('jc-chatbot', !atTop && 'is-scrolled')} onClick={onOpen} aria-label="해파리 AI 가이드 열기">
