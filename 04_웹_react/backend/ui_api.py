@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import datetime as dt
 
+import pandas as pd
 from fastapi import APIRouter, HTTPException
 
 from 서비스로직 import 없음, 월_주차, 한글날짜
@@ -59,6 +60,14 @@ def list_beaches(date: str = ""):
                         for b in s.해수욕장.itertuples()]}
 
 
+def _평년안내(s, 권역: str, 날짜: dt.date) -> str:
+    """평년 기준 전망일 때: 어느 권역 자료가 없는지 + 그 권역의 마지막 주간보고 날짜"""
+    R = s.D["보고"]
+    지난 = R[(R["권역명"] == 권역) & (R["시작일"] <= pd.Timestamp(날짜))]["시작일"]
+    끝 = f" (마지막 {권역} 보고: {지난.max():%Y.%m.%d})" if not 지난.empty else ""
+    return f"최근 2주 주간보고에 {권역} 권역 조사 자료가 없어 평년 기준 전망입니다.{끝}"
+
+
 @router.get("/beaches/{beach_id}")
 def beach_detail(beach_id: str, date: str = ""):
     날짜 = _날짜(date)
@@ -99,7 +108,7 @@ def beach_detail(beach_id: str, date: str = ""):
             "latest_label": "가장 최근 관측" if o["최근시작일"] is None else f"가장 최근 관측 ({o['최근시작일']:%Y-%m-%d} 주)",
             "latest_temp": "-" if 없음(o["최근수온"]) else f"수온 {o['최근수온']:.1f}°C"},
         "notice": {"message": (f"{한글날짜(기준일)} 주간보고를 넣은 모델 예측입니다." if 기준일 is not None
-                               else "최근 2주 안에 주간보고가 없어 평년 기준 전망입니다."),
+                               else _평년안내(s, d["권역명"], 날짜)),
                    "model": ("로지스틱 회귀 모델 · 권역예측 테이블" if 기준일 is not None
                              else "같은 시기 주간보고의 대량출현 비율 × 해수욕장 가중치")},
         "season": {"data": data, "selected_index": idx[0] if idx else None, "is_example": False},
