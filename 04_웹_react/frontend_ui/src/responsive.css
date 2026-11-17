@@ -17,9 +17,11 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 .jc-top__name > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---------- 챗봇 열기 버튼: 말풍선을 조금 작게 (오른쪽 카드 숫자를 가리지 않게) ---------- */
-.jc-chatbot { right: 24px; gap: 10px; }
-.jc-chatbot__bubble { padding: 10px 14px; border-radius: 14px; gap: 2px; }
-.jc-chatbot__avatar img, .jc-chatbot__fallback { width: 76px; height: 76px; }
+.jc-chatbot { right: 16px; gap: 10px; }
+.jc-chatbot__bubble { padding: 10px 14px; border-radius: 14px; gap: 2px; transition: opacity .2s, transform .2s; }
+.jc-chatbot__avatar img, .jc-chatbot__fallback { width: 64px; height: 64px; }
+.jc-chatbot.is-scrolled .jc-chatbot__bubble { opacity: 0; transform: translateX(8px); pointer-events: none; }
+.jc-chatbot.is-scrolled:hover .jc-chatbot__bubble, .jc-chatbot.is-scrolled:focus-visible .jc-chatbot__bubble { opacity: 1; transform: none; }
 
 /* ---------- 챗봇 답 아래 📍 해수욕장 버튼 ---------- */
 .jc-chat__places { display: flex; flex-wrap: wrap; gap: 6px; }
