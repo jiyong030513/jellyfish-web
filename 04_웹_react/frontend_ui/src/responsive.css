@@ -29,7 +29,7 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 
   .demo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
   .demo-grid > .jc-map-card { grid-column: 1 / -1; order: -1; }   /* 지도를 맨 위에 크게 */
-  .jc-summary, .jc-map-card { min-height: 0; }
+  .jc-summary, .jc-map-card, .jc-forecast, .jc-obs { min-height: 0; }
   .jc-map { height: 480px; }
   .jc-map--loading { height: 480px; }
 
@@ -48,7 +48,14 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
   .jc-search, .jc-date { width: 100%; flex: none; }
   .jc-search { flex-wrap: nowrap; }
 
-  .demo-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+  .demo-page { overflow-x: hidden; }
+  .demo-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+  .demo-grid > *, .demo-col > * { min-width: 0; }
+  .jc-legend--grid { grid-template-columns: 1fr; }
+  .jc-toggle > *, .jc-tabs > * { flex: 1 1 0; width: auto; min-width: 0; }
+  .jc-search__btn, .jc-search button { width: 72px; flex: none; }
+  .jc-card__head { flex-wrap: wrap; }
+  .jc-chart-card .jc-card__head { flex-direction: column; align-items: flex-start; }
   .demo-col { gap: 16px; }
   .jc-card { padding: 20px; border-radius: 16px; }
   .jc-map { height: 360px; margin-top: 16px; }
