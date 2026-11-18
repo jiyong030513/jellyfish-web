@@ -7,6 +7,7 @@ import {
   ServiceFooter, ChatbotLauncher, ChatPanel, GlassBackdrop, BeachMap,
 } from './components';
 import { useJellyCast } from './hooks/useJellyCast.js';
+import { InfoModal } from './components/InfoModal.jsx';
 import { toDots, weekLabel } from './api/week.js';
 
 const Sheet = lazy(() => import('./dev/Sheet.jsx'));
@@ -23,6 +24,7 @@ function JellyCastPage({ forceLoading = false }) {
   const j = useJellyCast();
   const mapRef = useRef(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [info, setInfo] = useState(null); // 위쪽 메뉴 팝업: '데이터 출처' | '모델 안내' | '관측소 정보'
 
   const cardsLoading = forceLoading || j.loading;
   const mapLoading = forceLoading || j.listLoading;
@@ -33,7 +35,7 @@ function JellyCastPage({ forceLoading = false }) {
     <div className="demo-page surface-page">
       <GlassBackdrop />
       <div className="demo-container">
-        <ServiceHeader />
+        <ServiceHeader onMenu={setInfo} />
         <ServiceIntro />
 
         <div className="demo-search-row">
@@ -91,7 +93,8 @@ function JellyCastPage({ forceLoading = false }) {
       {chatOpen
         ? <ChatPanel open onClose={() => setChatOpen(false)} beach={j.selected} horizonWeeks={j.weeks} date={j.date}
             onPick={(id) => { j.select(id); if (window.innerWidth < 720) setChatOpen(false); }} />
-        : <ChatbotLauncher onOpen={() => setChatOpen(true)} />}
+        : <ChatbotLauncher onOpen={() => setChatOpen(true)} imageSrc="/jellyfish.png" />}
+      {info && <InfoModal topic={info} onClose={() => setInfo(null)} obs={d?.obs} beachName={d?.beach.name} />}
     </div>
   );
 }

@@ -12,12 +12,14 @@ import { useEffect, useState } from 'react';
 const cx = (...c) => c.filter(Boolean).join(' ');
 
 /* ───────────── 영역/서비스헤더 ───────────── */
-export function ServiceHeader({ menus = ['위험정보', '예측 지수', '관측 정보', '지표 안내'], onGuide }) {
+export function ServiceHeader({ menus = ['데이터 출처', '모델 안내', '관측소 정보'], onMenu, onGuide }) {
   return (
     <header className="jc-header">
       <HeaderBrand />
       <nav className="jc-nav surface-navigation" aria-label="주요 메뉴">
-        {menus.map((m) => <NavItem key={m}>{m}</NavItem>)}
+        {menus.map((m) => (
+          <NavItem key={m} onClick={(e) => { e.preventDefault(); onMenu?.(m); }}>{m}</NavItem>
+        ))}
       </nav>
       <GuideButton onClick={onGuide} />
     </header>
@@ -224,8 +226,8 @@ export function ForecastNotice({ message, model, loading = false }) {
       <div className="jc-stack-8">
         <span className="text-label jc-c-secondary">예측 정보 안내</span>
         <p className="text-section-subtitle">{message}</p>
+        {model && <span className="text-body jc-c-secondary">{model}</span>}
       </div>
-      <span className="text-body jc-c-secondary">{model}</span>
     </section>
   );
 }
@@ -349,13 +351,11 @@ export function TopRiskCard({ top, selectedId, onSelect }) {
 }
 
 /* ───────────── 영역/서비스푸터 ───────────── */
-export function ServiceFooter({ links = ['데이터 출처', '모델 안내', '이용 안내'] }) {
+export function ServiceFooter({ contact = 'hyoseop2526@gmail.com' }) {
   return (
     <footer className="jc-footer">
       <FooterBrand />
-      <nav className="jc-footer__links" aria-label="푸터 링크">
-        {links.map((l) => <FooterLink key={l}>{l}</FooterLink>)}
-      </nav>
+      <span className="text-body jc-c-secondary">{contact}</span>
     </footer>
   );
 }

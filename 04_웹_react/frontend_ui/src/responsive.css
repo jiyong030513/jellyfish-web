@@ -23,6 +23,16 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 .jc-chatbot.is-scrolled .jc-chatbot__bubble { opacity: 0; transform: translateX(8px); pointer-events: none; }
 .jc-chatbot.is-scrolled:hover .jc-chatbot__bubble, .jc-chatbot.is-scrolled:focus-visible .jc-chatbot__bubble { opacity: 1; transform: none; }
 
+/* ---------- 위쪽 메뉴 설명 팝업 ---------- */
+.jc-info-backdrop { position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, .6); }
+.jc-info { width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; box-shadow: var(--shadow-card-outline), 0 16px 48px rgba(0, 0, 0, .55); }
+.jc-info__body { margin-top: 8px; }
+.jc-info__row { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--color-border-subtle); }
+.jc-info__row:last-child { border-bottom: 0; }
+.jc-info__note { margin: 12px 0 0; }
+.jc-nav__item { cursor: pointer; }
+.jc-chatbot__avatar img { filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .35)); }
+
 /* ---------- 챗봇 답 아래 📍 해수욕장 버튼 ---------- */
 .jc-chat__places { display: flex; flex-wrap: wrap; gap: 6px; }
 

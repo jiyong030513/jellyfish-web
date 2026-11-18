@@ -12,7 +12,7 @@ export function BrandLogo({ variant = 'tile', src, size }) {
   return <span className={cx('jc-logo', `jc-logo--${variant}`)}>{icon}</span>;
 }
 
-export function HeaderBrand({ name = '해수욕장 해파리 위험도', logoSrc }) {
+export function HeaderBrand({ name = 'JellyCast', logoSrc }) {
   return (
     <span className="jc-brand">
       <BrandLogo variant="tile" src={logoSrc} />
