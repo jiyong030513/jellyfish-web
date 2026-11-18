@@ -1,0 +1,27 @@
+/* 페이지 뒷배경 (PageBackground.jsx) */
+.jc-page-bg {
+  --jc-bg-scale: 1;               /* 도형 크기 배율 — 좁은 화면에서 줄임 */
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  background: #050506;            /* 이미지 바탕색과 같아야 이음매가 안 보임 */
+}
+
+.jc-page-bg__piece {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+}
+
+/* 원본 1440×1936 기준 위치 그대로 */
+.jc-page-bg__piece--tl { top: 0;    left: 0;  width: calc(380px * var(--jc-bg-scale)); }
+.jc-page-bg__piece--tr { top: 0;    right: 0; width: calc(800px * var(--jc-bg-scale)); }
+.jc-page-bg__piece--bl { bottom: 0; left: 0;  width: calc(700px * var(--jc-bg-scale)); }
+.jc-page-bg__piece--br { bottom: 0; right: 0; width: calc(440px * var(--jc-bg-scale)); }
+
+@media (max-width: 1024px) { .jc-page-bg { --jc-bg-scale: 0.7; } }
+@media (max-width: 640px)  { .jc-page-bg { --jc-bg-scale: 0.45; } }

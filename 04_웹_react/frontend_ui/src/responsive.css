@@ -38,7 +38,7 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 
 /* ---------- 2칸 (모니터 반쪽 · 노트북 작은 창 · 태블릿) ---------- */
 @media (max-width: 1391px) {
-  .demo-container { width: auto; max-width: 1344px; padding: 0 24px 40px; }
+  .demo-container { width: auto; max-width: 1344px; padding: 0 24px; }
   .demo-search-row { flex-wrap: wrap; gap: 16px; }
   .demo-search-row__inputs { flex: 1 1 100%; flex-wrap: wrap; gap: 16px; }
   .jc-search { flex: 1 1 360px; width: auto; }
@@ -97,6 +97,7 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 .jc-intro--plain .text-display { margin-top: 0; }
 @media (max-width: 640px) { .jc-intro--plain { padding-top: 24px; } }
 
-/* 배경: 제목 뒤 왼쪽 위 파란 유리 곡면 (시안 캡처 기준) */
-.jc-glass-layer__left { position: absolute; top: 40px; left: -390px; transform: rotate(-16deg); }
-@media (max-width: 640px) { .jc-glass-layer__left { left: -440px; } }
+/* 페이지 배경: 피그마 네 모서리 유리 도형(PageBackground). 바탕색은 이미지와 같은 #050506이어야 이음매가 안 보임
+   컨테이너 아래 여백은 빼야 아래 도형이 푸터 뒤에 걸침 (휴대폰은 챗봇 버튼 자리 때문에 아래 여백 유지) */
+.demo-page { background: #050506; }
+@media (min-width: 641px) { .demo-container { padding-bottom: 0; } }

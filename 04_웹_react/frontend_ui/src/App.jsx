@@ -4,10 +4,11 @@ import { lazy, Suspense, useRef, useState } from 'react';
 import {
   ServiceHeader, ServiceIntro, BeachSearch, DateField, QueryBasis, UpdateBar,
   BeachSummaryCard, BeachMapCard, ForecastCard, ObservationCard, ForecastNotice, SeasonChartCard, TopRiskCard,
-  ServiceFooter, ChatbotLauncher, ChatPanel, GlassBackdrop, BeachMap,
+  ServiceFooter, ChatbotLauncher, ChatPanel, BeachMap,
 } from './components';
 import { useJellyCast } from './hooks/useJellyCast.js';
 import { InfoModal } from './components/InfoModal.jsx';
+import { PageBackground } from './components/PageBackground.jsx';
 import { toDots, weekLabel } from './api/week.js';
 
 const Sheet = lazy(() => import('./dev/Sheet.jsx'));
@@ -33,7 +34,7 @@ function JellyCastPage({ forceLoading = false }) {
 
   return (
     <div className="demo-page surface-page">
-      <GlassBackdrop />
+      <PageBackground />
       <div className="demo-container">
         <ServiceHeader onMenu={setInfo} onGuide={() => setInfo('이용 안내')} />
         <ServiceIntro eyebrow={null} />

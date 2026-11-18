@@ -389,7 +389,6 @@ export function GlassBackdrop() {
   return (
     <div className="jc-glass-layer" aria-hidden>
       <div className="glass-top jc-glass-layer__top" />
-      <div className="glass-top jc-glass-layer__left" />
       <div className="glass-bottom jc-glass-layer__bottom" />
     </div>
   );
