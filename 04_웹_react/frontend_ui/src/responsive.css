@@ -96,3 +96,7 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 .jc-intro--plain { padding-top: 40px; }
 .jc-intro--plain .text-display { margin-top: 0; }
 @media (max-width: 640px) { .jc-intro--plain { padding-top: 24px; } }
+
+/* 배경: 제목 뒤 왼쪽 위 파란 유리 곡면 (시안 캡처 기준) */
+.jc-glass-layer__left { position: absolute; top: 40px; left: -390px; transform: rotate(-16deg); }
+@media (max-width: 640px) { .jc-glass-layer__left { left: -440px; } }
