@@ -377,7 +377,7 @@ export function ChatbotLauncher({ onOpen, imageSrc }) {
         <span className="text-body jc-c-tooltip">궁금한 점을 물어보세요</span>
       </span>
       <span className="jc-chatbot__avatar">
-        {imageSrc ? <img src={imageSrc} alt="" /> : <span className="jc-chatbot__fallback"><BrandLogo variant="plain" size={44} /></span>}
+        <span className="jc-chatbot__fallback">{imageSrc ? <img src={imageSrc} alt="" /> : <BrandLogo variant="plain" size={44} />}</span>
         <span className="jc-chatbot__label text-label">AI 챗봇</span>
       </span>
     </button>
