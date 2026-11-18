@@ -96,7 +96,3 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
 .jc-intro--plain { padding-top: 40px; }
 .jc-intro--plain .text-display { margin-top: 0; }
 @media (max-width: 640px) { .jc-intro--plain { padding-top: 24px; } }
-
-/* 챗봇 버튼: 원래 시안의 파란 동그라미 배경 위에 해파리 그림 */
-.jc-chatbot__fallback img { width: 78%; height: 78%; object-fit: contain; filter: none; }
-.jc-chatbot__avatar .jc-chatbot__fallback img { width: 78%; height: 78%; }
