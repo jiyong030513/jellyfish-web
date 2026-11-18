@@ -33,8 +33,8 @@ export function ServiceIntro({
   description = '해수욕장별 출현 정보와 예측 위험 지수를 확인하세요.',
 }) {
   return (
-    <section className="jc-intro">
-      <p className="text-eyebrow jc-c-secondary">{eyebrow}</p>
+    <section className={cx('jc-intro', !eyebrow && 'jc-intro--plain')}>
+      {eyebrow && <p className="text-eyebrow jc-c-secondary">{eyebrow}</p>}
       <h1 className="text-display">{title}</h1>
       <p className="text-body-large jc-c-secondary">{description}</p>
     </section>

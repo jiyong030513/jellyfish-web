@@ -35,8 +35,8 @@ function JellyCastPage({ forceLoading = false }) {
     <div className="demo-page surface-page">
       <GlassBackdrop />
       <div className="demo-container">
-        <ServiceHeader onMenu={setInfo} />
-        <ServiceIntro />
+        <ServiceHeader onMenu={setInfo} onGuide={() => setInfo('이용 안내')} />
+        <ServiceIntro eyebrow={null} />
 
         <div className="demo-search-row">
           <div className="demo-search-row__inputs">

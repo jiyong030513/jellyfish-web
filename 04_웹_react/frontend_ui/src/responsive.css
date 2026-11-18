@@ -91,3 +91,8 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
   .jc-chat__msg { max-width: 92%; }
   .jc-chat__chip, .jc-chat__send { min-height: 44px; }
 }
+
+/* 위쪽 소개: 영문 작은 제목(JELLYFISH RISK MONITOR)을 뺀 뒤 간격 */
+.jc-intro--plain { padding-top: 40px; }
+.jc-intro--plain .text-display { margin-top: 0; }
+@media (max-width: 640px) { .jc-intro--plain { padding-top: 24px; } }
