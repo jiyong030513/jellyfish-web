@@ -1,6 +1,6 @@
 /* 기본 조각: 브랜드, 버튼, 입력, 선택, 범례, 정보, 배지, 지도 조각, 로딩
    시트의 컴포넌트 이름을 주석으로 달아 두었습니다. */
-import { useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { SearchIcon, CalendarIcon, RefreshIcon, ExpandIcon, JellyfishIcon } from './icons.jsx';
 import { riskLevel } from '../styles/tokens.js';
 
@@ -97,18 +97,66 @@ export function DateField({ label = '조회 날짜', value, onChange }) {
 }
 
 /* ───────────── 입력/해수욕장검색 ───────────── */
-export function BeachSearch({ value, onChange, onSubmit, placeholder = '해수욕장명 또는 지역명을 검색하세요' }) {
+const _norm = (s) => String(s ?? '').replace(/\s+/g, '').toLowerCase();
+
+/* 자동완성: 입력하면 이름(앞글자 일치 우선) → 지역 순으로 최대 8곳 목록, ↑↓·Enter·Esc 지원 */
+export function BeachSearch({ value, onChange, onSubmit, onPick, items = [], placeholder = '해수욕장명 또는 지역명을 검색하세요' }) {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const key = _norm(value);
+  const matches = useMemo(() => {
+    if (!key) return [];
+    const starts = [], inName = [], inRegion = [];
+    for (const b of items) {
+      const n = _norm(b.name);
+      if (n.startsWith(key)) starts.push(b);
+      else if (n.includes(key)) inName.push(b);
+      else if (_norm(b.region).includes(key)) inRegion.push(b);
+    }
+    return [...starts, ...inName, ...inRegion].slice(0, 8);
+  }, [items, key]);
+  const show = open && matches.length > 0;
+
+  const pick = (b) => { onChange?.(b.name); onPick?.(b.id); setOpen(false); setActive(-1); };
+  const onKeyDown = (e) => {
+    if (!show) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive((i) => (i + 1) % matches.length); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((i) => (i <= 0 ? matches.length - 1 : i - 1)); }
+    else if (e.key === 'Escape') setOpen(false);
+    else if (e.key === 'Enter' && active >= 0) { e.preventDefault(); pick(matches[active]); }
+  };
+
   return (
-    <form className="jc-search" role="search" onSubmit={(e) => { e.preventDefault(); onSubmit?.(value); }}>
+    <form className="jc-search" role="search" onSubmit={(e) => { e.preventDefault(); setOpen(false); onSubmit?.(value); }}>
       <SearchIcon size={20} className="jc-search__icon" />
       <input
         className="jc-search__input text-input"
         value={value ?? ''}
         placeholder={placeholder}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={(e) => { onChange?.(e.target.value); setOpen(true); setActive(-1); }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        onKeyDown={onKeyDown}
         aria-label="해수욕장 검색"
+        role="combobox"
+        aria-expanded={show}
+        aria-controls="jc-search-list"
+        autoComplete="off"
       />
       <Button variant="primary" type="submit">검색</Button>
+      {show && (
+        <ul id="jc-search-list" className="jc-suggest" role="listbox">
+          {matches.map((b, i) => (
+            <li key={b.id} role="option" aria-selected={i === active}
+                className={`jc-suggest__item${i === active ? ' is-active' : ''}`}
+                onMouseDown={(e) => { e.preventDefault(); pick(b); }}
+                onMouseEnter={() => setActive(i)}>
+              <span className="text-body">{b.name}</span>
+              <span className="text-body-small jc-c-muted">{b.region}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </form>
   );
 }

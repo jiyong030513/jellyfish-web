@@ -41,7 +41,7 @@ function JellyCastPage({ forceLoading = false }) {
 
         <div className="demo-search-row">
           <div className="demo-search-row__inputs">
-            <BeachSearch value={j.query} onChange={j.setQuery} onSubmit={j.search} />
+            <BeachSearch value={j.query} onChange={j.setQuery} onSubmit={j.search} onPick={j.select} items={j.beaches} />
             <DateField value={j.date} onChange={(v) => v && j.setDate(v)} />
           </div>
           <QueryBasis value={`${toDots(j.date)} · ${weekLabel(j.date)}`} />

@@ -101,3 +101,13 @@ div.jc-top__row, li.jc-top__row { cursor: default; justify-content: space-betwee
    컨테이너 아래 여백은 빼야 아래 도형이 푸터 뒤에 걸침 (휴대폰은 챗봇 버튼 자리 때문에 아래 여백 유지) */
 .demo-page { background: #050506; }
 @media (min-width: 641px) { .demo-container { padding-bottom: 0; } }
+
+/* 검색 자동완성 목록 */
+.jc-search { position: relative; z-index: 1000; }   /* 지도(Leaflet 400~)보다 위 */
+.jc-suggest {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 60; margin: 0; padding: 6px; list-style: none;
+  max-height: 340px; overflow-y: auto; border-radius: 14px;
+  background: var(--color-background-raised, #16171b); box-shadow: var(--shadow-card-outline), 0 12px 32px rgba(0, 0, 0, .5);
+}
+.jc-suggest__item { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 10px; cursor: pointer; text-align: left; }
+.jc-suggest__item.is-active { background: var(--color-background-hover, rgba(255, 255, 255, .08)); }
